@@ -185,3 +185,60 @@ artifact_data:
       - Sword
       - Bow
       chance: 35
+    lightning:
+      script: lightning_artifact
+      apply_lore:
+      - <&a>☼ Lightning
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Chance to strike lightning on hit
+      tools:
+      - Bow
+      - Crossbow
+      chance: 15
+    explosion:
+      script: explosion_artifact
+      apply_lore:
+      - <&a>☼ Explosion
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Chance to cause explosion on hit
+      tools:
+      - Bow
+      - Crossbow
+      chance: 15
+    scanner:
+      script: scanner_artifact
+      apply_lore:
+      - <&a>☼ Scanner
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Makes entities around the shot
+      - <&7>arrow glow after it hits
+      tools:
+      - Bow
+      - Crossbow
+      range: 15
+      glow_duration: 12s
+    slowness:
+      script: slowness_artifact
+      apply_lore:
+      - <&a>☼ Slowness
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Gives enemy slowness
+      tools:
+      - Bow
+      - Crossbow
+      - Axe
+      - Sword
+      chance: 30
+      duration: 10s

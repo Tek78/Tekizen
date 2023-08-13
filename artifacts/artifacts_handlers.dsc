@@ -39,7 +39,7 @@ artifact_world:
     on player clicks vanilla_tagged:tools|trimmable_armor in inventory with:item_flagged:artifact:
     - determine cancelled passively
     - inject apply_task
-    on player clicks bow in inventory with:item_flagged:artifact:
+    on player clicks bow|crossbow in inventory with:item_flagged:artifact:
     - determine cancelled passively
     - inject apply_task
 
@@ -128,6 +128,7 @@ artifact_world:
       - stop
     - drop <[drops]> <context.location.above[0.35]>
 
+    #bleed
     after entity damaged by player with:item_flagged:artifacts.bleed:
     - stop if:!<context.entity.is_spawned>
     - define chance <script[artifact_data].data_key[artifacts.bleed.chance]>
@@ -138,3 +139,39 @@ artifact_world:
       - playeffect at:<context.entity.location.above[1.2]> effect:RED_DUST special_data:1.4|red offset:0.25 quantity:8
       - hurt 0.25 <context.entity>
       - wait 1s
+
+    #lightning
+    on player shoots item_flagged:artifacts.lightning:
+    - define chance <script[artifact_data].data_key[artifacts.lightning.chance]>
+    - stop if:!<util.random_chance[<[chance]>]>
+    - flag <context.projectile> lightning
+    after entity_flagged:lightning hits:
+    - strike <context.projectile.location>
+    - remove <context.projectile>
+
+    #explosion
+    on player shoots item_flagged:artifacts.explosion:
+    - define chance <script[artifact_data].data_key[artifacts.explosion.chance]>
+    - stop if:!<util.random_chance[<[chance]>]>
+    - flag <context.projectile> explosion
+    after entity_flagged:explosion hits:
+    - explode power:1.45 <context.projectile.location> fire breakblocks
+    - remove <context.projectile>
+
+    #scanner
+    on player shoots item_flagged:artifacts.scanner:
+    - flag <context.projectile> scanner
+    on entity_flagged:scanner hits:
+    - define range <script[artifact_data].data_key[artifacts.scanner.range]>
+    - define entities <context.projectile.location.find.living_entities.within[<[range]>].filter[glowing.not]>
+    - stop if:<[entities].is_empty>
+    - define duration <script[artifact_data].data_key[artifacts.scanner.glow_duration]>
+    - cast glowing <[entities]> hide_particles duration:<[duration]>
+
+    #slowness
+    after entity damaged by player with:item_flagged:artifacts.slowness:
+    - stop if:!<context.entity.is_spawned>
+    - define chance <script[artifact_data].data_key[artifacts.slowness.chance]>
+    - stop if:!<util.random_chance[<[chance]>]>
+    - define duration <script[artifact_data].data_key[artifacts.slowness.duration]>
+    - cast slow duration:<[duration]> <context.entity>

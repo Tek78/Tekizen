@@ -165,3 +165,59 @@ bleed_artifact:
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
     lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+
+#lightning
+lightning_artifact:
+  type: item
+  flags:
+    artifact: lightning
+  data:
+    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
+  material: <script[artifact_data].data_key[settings.material]>
+  display name: <&a>Lightning Artifact
+  mechanisms:
+    custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+
+#explosion
+explosion_artifact:
+  type: item
+  flags:
+    artifact: explosion
+  data:
+    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
+  material: <script[artifact_data].data_key[settings.material]>
+  display name: <&a>Explosion Artifact
+  mechanisms:
+    custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+
+#scanner
+scanner_artifact:
+  type: item
+  flags:
+    artifact: scanner
+  data:
+    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
+  material: <script[artifact_data].data_key[settings.material]>
+  display name: <&a>Scanner Artifact
+  mechanisms:
+    custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+
+#slowness
+slowness_artifact:
+  type: item
+  flags:
+    artifact: slowness
+  data:
+    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
+  material: <script[artifact_data].data_key[settings.material]>
+  display name: <&a>Slowness Artifact
+  mechanisms:
+    custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
