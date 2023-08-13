@@ -40,7 +40,7 @@ artifact_world:
     on player breaks block with:item_flagged:artifacts:
     - if <player.item_in_hand.has_flag[artifacts.auto_smelt]>:
       - define drop <script[artifact_data].data_key[artifacts.auto_smelt.ores.<context.material.name>]||null>
-    - if <[drop]||null> == null || !<[drop].exists>:
+    - if <[drop]||null> == null:
       - define drop <context.location.drops[<player.item_in_hand>]>
     - if <player.item_in_hand.has_flag[artifacts.telepathy]>:
       - give <[drop]>
