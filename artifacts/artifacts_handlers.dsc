@@ -6,6 +6,31 @@ artifacts_tool:
   - define lore "<&6>Applies to: <&e><[tools].separated_by[<&7>, <&e>].split_lines_by_width[100]>"
   - determine <[lore]>
 
+apply_task:
+  type: task
+  script:
+  - define applied <context.item.flag[artifacts].keys.size||0>
+  - if <[applied]> >= <script[artifact_data].data_key[settings.max_per_item]>:
+    - narrate "<&7>You can't apply more artifacts to this item."
+    - stop
+  - define artifact <context.cursor_item.flag[artifact]>
+  - if <context.item.has_flag[artifacts.<[artifact]>]>:
+    - narrate "<&7>This item already has this artifact applied."
+    - stop
+  - define tools <script[artifact_data].data_key[artifacts.<[artifact]>.tools]>
+  - foreach <[tools]>:
+    - if <context.item.advanced_matches[*<[value]>]>:
+      - define match <[value]>
+      - foreach stop
+  - if !<[match].exists>:
+    - narrate "<&7>This artifact can't be applied to <&a><context.item.formatted.to_titlecase><&7>."
+    - stop
+  - define lore <script[artifact_data].parsed_key[artifacts.<[artifact]>.apply_lore]>
+  - define lore <context.item.lore.if_null[<list>].insert[<[lore]>].at[1]>
+  - take cursoritem
+  - inventory adjust d:<context.clicked_inventory> slot:<context.slot> lore:<[lore]>
+  - inventory flag d:<context.clicked_inventory> slot:<context.slot> artifacts.<[artifact]>
+
 artifact_world:
   type: world
   events:
@@ -13,27 +38,10 @@ artifact_world:
     #apply logic
     on player clicks vanilla_tagged:tools|trimmable_armor in inventory with:item_flagged:artifact:
     - determine cancelled passively
-    - define applied <context.item.flag[artifacts].keys.size||0>
-    - if <[applied]> >= <script[artifact_data].data_key[settings.max_per_item]>:
-      - narrate "<&7>You can't apply more artifacts to this item."
-      - stop
-    - define artifact <context.cursor_item.flag[artifact]>
-    - if <context.item.has_flag[artifacts.<[artifact]>]>:
-      - narrate "<&7>This item already has this artifact applied."
-      - stop
-    - define tools <script[artifact_data].data_key[artifacts.<[artifact]>.tools]>
-    - foreach <[tools]>:
-      - if <context.item.advanced_matches[*<[value]>]>:
-        - define match <[value]>
-        - foreach stop
-    - if !<[match].exists>:
-      - narrate "<&7>This artifact can't be applied to <&a><context.item.formatted.to_titlecase><&7>."
-      - stop
-    - define lore <script[artifact_data].parsed_key[artifacts.<[artifact]>.apply_lore]>
-    - define lore <context.item.lore.if_null[<list>].insert[<[lore]>].at[1]>
-    - take cursoritem
-    - inventory adjust d:<context.clicked_inventory> slot:<context.slot> lore:<[lore]>
-    - inventory flag d:<context.clicked_inventory> slot:<context.slot> artifacts.<[artifact]>
+    - inject apply_task
+    on player clicks bow in inventory with:item_flagged:artifact:
+    - determine cancelled passively
+    - inject apply_task
 
     #telepathy + auto smelt handler
     on player breaks block with:item_flagged:artifacts:
@@ -117,3 +125,13 @@ artifact_world:
       - give <[drops]>
       - stop
     - drop <[drops]> <context.location.above[0.35]>
+
+    on entity damaged by player with:item_flagged:artifacts.bleed:
+    - define chance <script[artifact_data].data_key[artifacts.bleed.chance]>
+    - stop if:!<util.random_chance[<[chance]>]>
+    - flag <context.entity> bleeding expire:6s
+    - while <context.entity.has_flag[bleeding]>:
+      - stop if:!<context.entity.is_spawned>
+      - playeffect at:<context.entity.location.above[1.2]> effect:RED_DUST special_data:1.4|red offset:0.25 quantity:8
+      - hurt 0.25 <context.entity>
+      - wait 1s

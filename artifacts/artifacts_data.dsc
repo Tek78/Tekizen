@@ -169,3 +169,17 @@ artifact_data:
         wheat: wheat_seeds
         potatoes: potato
         beetroots: beetroot_seeds
+    bleed:
+      script: bleed_artifact
+      apply_lore:
+      - <&a>☼ Bleed
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Makes the enemy bleed and hurt
+      tools:
+      - Axe
+      - Sword
+      - Bow
+      chance: 35
