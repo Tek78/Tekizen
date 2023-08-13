@@ -185,6 +185,7 @@ artifact_data:
       - Sword
       - Bow
       chance: 35
+      duration: 6s
     lightning:
       script: lightning_artifact
       apply_lore:
@@ -225,7 +226,7 @@ artifact_data:
       - Bow
       - Crossbow
       range: 15
-      glow_duration: 12s
+      duration: 12s
     slowness:
       script: slowness_artifact
       apply_lore:

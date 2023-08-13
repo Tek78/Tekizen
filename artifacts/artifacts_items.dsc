@@ -4,13 +4,13 @@ auto_smelt_artifact:
   flags:
     artifact: auto_smelt
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Auto Smelt Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #telepathy
 telepathy_artifact:
@@ -18,13 +18,13 @@ telepathy_artifact:
   flags:
     artifact: telepathy
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Telepathy Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #withering
 withering_artifact:
@@ -32,13 +32,13 @@ withering_artifact:
   flags:
     artifact: withering
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Withering Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #allure
 allure_artifact:
@@ -46,13 +46,13 @@ allure_artifact:
   flags:
     artifact: allure
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Allure Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #lightweight
 lightweight_artifact:
@@ -60,13 +60,13 @@ lightweight_artifact:
   flags:
     artifact: lightweight
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Lightweight Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #overlord
 overlord_artifact:
@@ -74,13 +74,13 @@ overlord_artifact:
   flags:
     artifact: overlord
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Overlord Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #reforged
 reforged_artifact:
@@ -88,13 +88,13 @@ reforged_artifact:
   flags:
     artifact: reforged
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Reforged Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #lavawalker
 lavawalker_artifact:
@@ -102,13 +102,13 @@ lavawalker_artifact:
   flags:
     artifact: lavawalker
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Lava Walker Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #unforged
 unforged_artifact:
@@ -116,13 +116,13 @@ unforged_artifact:
   flags:
     artifact: unforged
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Lava Walker Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #lifesteal
 lifesteal_artifact:
@@ -130,13 +130,13 @@ lifesteal_artifact:
   flags:
     artifact: lifesteal
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Lifesteal Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #replant
 replant_artifact:
@@ -144,13 +144,13 @@ replant_artifact:
   flags:
     artifact: replant
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Replant Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #bleed
 bleed_artifact:
@@ -158,13 +158,13 @@ bleed_artifact:
   flags:
     artifact: bleed
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Bleed Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #lightning
 lightning_artifact:
@@ -172,13 +172,13 @@ lightning_artifact:
   flags:
     artifact: lightning
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Lightning Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #explosion
 explosion_artifact:
@@ -186,13 +186,13 @@ explosion_artifact:
   flags:
     artifact: explosion
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Explosion Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #scanner
 scanner_artifact:
@@ -200,13 +200,13 @@ scanner_artifact:
   flags:
     artifact: scanner
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Scanner Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>
 
 #slowness
 slowness_artifact:
@@ -214,10 +214,10 @@ slowness_artifact:
   flags:
     artifact: slowness
   data:
-    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    artifact_data: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>].proc[artifacts_tool]>
     lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Slowness Artifact
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
-    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.artifact_data]>]>

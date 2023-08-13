@@ -1,9 +1,16 @@
 #proc for tool apply lore
 artifacts_tool:
   type: procedure
-  definitions: tools
+  definitions: artifact_data
   script:
-  - define lore "<&6>Applies to: <&e><[tools].separated_by[<&7>, <&e>].split_lines_by_width[100]>"
+  - define tools <[artifact_data].get[tools]>
+  - define applicaple "<&6>Applies to: <&e><[tools].separated_by[<&7>, <&e>].split_lines_by_width[100]>"
+  - define lore <list[<[applicaple]>]>
+  - define info <list[Chance|Duration|Range]>
+  - foreach <[info]>:
+    - foreach next if:!<[artifact_data].contains[<[value]>]>
+    - define val "<&6><[value]>: <&7><[artifact_data].get[<[value]>]>"
+    - define lore <[lore].include[<[val]>]>
   - determine <[lore]>
 
 apply_task:
@@ -133,7 +140,8 @@ artifact_world:
     - stop if:!<context.entity.is_spawned>
     - define chance <script[artifact_data].data_key[artifacts.bleed.chance]>
     - stop if:!<util.random_chance[<[chance]>]>
-    - flag <context.entity> bleeding expire:6s
+    - define duration <script[artifact_data].data_key[artifacts.bleed.duration]>
+    - flag <context.entity> bleeding expire:<[duration]>
     - while <context.entity.has_flag[bleeding]>:
       - stop if:!<context.entity.is_spawned>
       - playeffect at:<context.entity.location.above[1.2]> effect:RED_DUST special_data:1.4|red offset:0.25 quantity:8
@@ -165,7 +173,7 @@ artifact_world:
     - define range <script[artifact_data].data_key[artifacts.scanner.range]>
     - define entities <context.projectile.location.find.living_entities.within[<[range]>].filter[glowing.not]>
     - stop if:<[entities].is_empty>
-    - define duration <script[artifact_data].data_key[artifacts.scanner.glow_duration]>
+    - define duration <script[artifact_data].data_key[artifacts.scanner.duration]>
     - cast glowing <[entities]> hide_particles duration:<[duration]>
 
     #slowness
