@@ -3,8 +3,7 @@ artifacts_tool:
   type: procedure
   definitions: tools
   script:
-  - define lore <list[<&6>Applies to:]>
-  - define lore <[lore].include[<&e><[tools].separated_by[<&7>, <&e>].split_lines_by_width[100]>]>
+  - define lore "<&6>Applies to: <&e><[tools].separated_by[<&7>, <&e>].split_lines_by_width[100]>"
   - determine <[lore]>
 
 artifact_world:
@@ -38,6 +37,7 @@ artifact_world:
 
     #telepathy + auto smelt handler
     on player breaks block with:item_flagged:artifacts:
+    - ratelimit <player> 1t
     - if <player.item_in_hand.has_flag[artifacts.auto_smelt]>:
       - define drop <script[artifact_data].data_key[artifacts.auto_smelt.ores.<context.material.name>]||null>
     - if <[drop]||null> == null:
@@ -100,3 +100,20 @@ artifact_world:
     - stop if:!<util.random_chance[<[chance]>]>
     - define heal <context.damage.div[2.5].round_down>
     - heal <[heal]> <player>
+
+    #replant
+    on player right clicks vanilla_tagged:crops with:item_flagged:artifacts.replant:
+    - ratelimit <player> 1t
+    - if <context.location.material.name> !in <script[artifact_data].data_key[artifacts.replant.crops].keys>:
+      - stop
+    - if <context.location.material.age> != <context.location.material.maximum_age>:
+      - stop
+    - define seed <script[artifact_data].data_key[artifacts.replant.crops.<context.location.material.name>]>
+    - stop if:!<player.inventory.contains_item[<[seed]>]>
+    - define drops <context.location.drops[<player.item_in_hand>]>
+    - take item:<[seed]>
+    - adjustblock <context.location> age:0
+    - if <player.item_in_hand.has_flag[artifacts.telepathy]>:
+      - give <[drops]>
+      - stop
+    - drop <[drops]> <context.location.above[0.35]>

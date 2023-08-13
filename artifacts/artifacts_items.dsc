@@ -137,3 +137,17 @@ lifesteal_artifact:
   mechanisms:
     custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
     lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>
+
+#replant
+replant_artifact:
+  type: item
+  flags:
+    artifact: replant
+  data:
+    tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
+  material: <script[artifact_data].data_key[settings.material]>
+  display name: <&a>Replant Artifact
+  mechanisms:
+    custom_model_data: <script[artifact_data].data_key[settings.custom_model]>
+    lore: <script.parsed_key[data.lore].include[<script.parsed_key[data.tools]>]>

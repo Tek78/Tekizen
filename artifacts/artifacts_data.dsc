@@ -152,3 +152,20 @@ artifact_data:
       - Sword
       - Axe
       chance: 15
+    replant:
+      script: replant_artifact
+      apply_lore:
+      - <&a>☼ Replant
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Replants crops by right clicking them
+      - <&7>if you have seeds in your inventory
+      tools:
+      - Hoe
+      crops:
+        carrots: carrot
+        wheat: wheat_seeds
+        potatoes: potato
+        beetroots: beetroot_seeds
