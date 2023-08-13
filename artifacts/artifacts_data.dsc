@@ -139,3 +139,16 @@ artifact_data:
       - Axe
       - Shovel
       chance: 15
+    lifesteal:
+      script: lifesteal_artifact
+      apply_lore:
+      - <&a>☼ Unforged
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Chance to heal when attacking
+      tools:
+      - Sword
+      - Axe
+      chance: 15

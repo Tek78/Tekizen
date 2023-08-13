@@ -30,7 +30,7 @@ artifact_world:
     - if !<[match].exists>:
       - narrate "<&7>This artifact can't be applied to <&a><context.item.formatted.to_titlecase><&7>."
       - stop
-    - define lore <script[artifact_data].parsed_key[artifacts.<[artifact]>.lore]>
+    - define lore <script[artifact_data].parsed_key[artifacts.<[artifact]>.apply_lore]>
     - define lore <context.item.lore.if_null[<list>].insert[<[lore]>].at[1]>
     - take cursoritem
     - inventory adjust d:<context.clicked_inventory> slot:<context.slot> lore:<[lore]>
@@ -91,3 +91,12 @@ artifact_world:
     - define chance <script[artifact_data].data_key[artifacts.unforged.chance]>
     - if <util.random_chance[<[chance]>]>:
       - determine cancelled
+
+    #lifesteal
+    on entity damaged by player with:item_flagged:artifacts.lifesteal:
+    - if <player.health> == <player.health_max>:
+      - stop
+    - define chance <script[artifact_data].data_key[artifacts.lifesteal.chance]>
+    - stop if:!<util.random_chance[<[chance]>]>
+    - define heal <context.damage.div[2.5].round_down>
+    - heal <[heal]> <player>
