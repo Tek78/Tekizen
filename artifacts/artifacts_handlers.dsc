@@ -58,6 +58,8 @@ artifact_world:
     #withering handler
     after entity damaged by player with:item_flagged:artifacts.withering:
     - stop if:!<context.entity.is_spawned>
+    - define chance <script[artifact_data].data_key[artifacts.withering.chance]>
+    - stop if:!<util.random_chance[<[chance]>]>
     - define duration <script[artifact_data].data_key[artifacts.withering.duration]>
     - cast wither duration:<[duration]> <context.entity>
 
@@ -126,7 +128,8 @@ artifact_world:
       - stop
     - drop <[drops]> <context.location.above[0.35]>
 
-    on entity damaged by player with:item_flagged:artifacts.bleed:
+    after entity damaged by player with:item_flagged:artifacts.bleed:
+    - stop if:!<context.entity.is_spawned>
     - define chance <script[artifact_data].data_key[artifacts.bleed.chance]>
     - stop if:!<util.random_chance[<[chance]>]>
     - flag <context.entity> bleeding expire:6s

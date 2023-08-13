@@ -57,7 +57,9 @@ artifact_data:
       tools:
       - Sword
       - Axe
+      - Bow
       duration: 5s
+      chance: 20
     allure:
       script: allure_artifact
       apply_lore:
