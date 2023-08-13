@@ -19,8 +19,7 @@ telepathy_artifact:
     artifact: telepathy
   data:
     tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
-    description: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.description]>
-    lore: <script[artifact_data].parsed_key[settings.lore].include[<script.parsed_key[data.description]>]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Telepathy Artifact
   mechanisms:
@@ -34,8 +33,7 @@ withering_artifact:
     artifact: withering
   data:
     tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
-    description: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.description]>
-    lore: <script[artifact_data].parsed_key[settings.lore].include[<script.parsed_key[data.description]>]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Withering Artifact
   mechanisms:
@@ -49,8 +47,7 @@ allure_artifact:
     artifact: allure
   data:
     tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
-    description: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.description]>
-    lore: <script[artifact_data].parsed_key[settings.lore].include[<script.parsed_key[data.description]>]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Allure Artifact
   mechanisms:
@@ -64,8 +61,7 @@ lightweight_artifact:
     artifact: lightweight
   data:
     tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
-    description: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.description]>
-    lore: <script[artifact_data].parsed_key[settings.lore].include[<script.parsed_key[data.description]>]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Lightweight Artifact
   mechanisms:
@@ -79,8 +75,7 @@ overlord_artifact:
     artifact: overlord
   data:
     tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
-    description: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.description]>
-    lore: <script[artifact_data].parsed_key[settings.lore].include[<script.parsed_key[data.description]>]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Overlord Artifact
   mechanisms:
@@ -94,8 +89,7 @@ reforged_artifact:
     artifact: reforged
   data:
     tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
-    description: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.description]>
-    lore: <script[artifact_data].parsed_key[settings.lore].include[<script.parsed_key[data.description]>]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Reforged Artifact
   mechanisms:
@@ -109,8 +103,7 @@ lavawalker_artifact:
     artifact: lavawalker
   data:
     tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
-    description: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.description]>
-    lore: <script[artifact_data].parsed_key[settings.lore].include[<script.parsed_key[data.description]>]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Lava Walker Artifact
   mechanisms:
@@ -124,8 +117,7 @@ unforged_artifact:
     artifact: unforged
   data:
     tools: <script[artifact_data].data_key[artifacts.<script.data_key[flags.artifact]>.tools].proc[artifacts_tool]>
-    description: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.description]>
-    lore: <script[artifact_data].parsed_key[settings.lore].include[<script.parsed_key[data.description]>]>
+    lore: <script[artifact_data].parsed_key[artifacts.<script.data_key[flags.artifact]>.lore]>
   material: <script[artifact_data].data_key[settings.material]>
   display name: <&a>Lava Walker Artifact
   mechanisms:

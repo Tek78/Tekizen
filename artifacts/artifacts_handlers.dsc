@@ -4,8 +4,7 @@ artifacts_tool:
   definitions: tools
   script:
   - define lore <list[<&6>Applies to:]>
-  - foreach <[tools]>:
-    - define "lore:->:<&a>* <&7><[value]>"
+  - define lore <[lore].include[<&e><[tools].separated_by[<&7>, <&e>].split_lines_by_width[100]>]>
   - determine <[lore]>
 
 artifact_world:
