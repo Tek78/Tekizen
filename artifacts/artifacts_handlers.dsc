@@ -11,7 +11,7 @@ apply_task:
     - narrate "<&7>This item already has this artifact applied."
     - stop
   - define tools <script[artifact_data].data_key[artifacts.<[artifact]>.tools]>
-  - if <[tools].filter_tag[<context.item.advanced_matches[*<[filter_value]>]>].is_empty>:
+  - if <[tools].filter_tag[<context.item.advanced_matches[*_<[filter_value]>]>].is_empty>:
     - narrate "<&7>This artifact can't be applied to <&a><context.item.formatted.to_titlecase><&7>."
     - stop
   - define lore <script[artifact_data].parsed_key[artifacts.<[artifact]>.apply_lore]>
