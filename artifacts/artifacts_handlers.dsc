@@ -1,6 +1,6 @@
 apply_task:
   type: task
-  debug: true
+  debug: false
   script:
   - define applied <context.item.flag[artifacts].keys.size||0>
   - if <[applied]> >= <script[artifact_data].data_key[settings.max_per_item]>:
