@@ -1,5 +1,6 @@
 apply_task:
   type: task
+  debug: false
   script:
   - define applied <context.item.flag[artifacts].keys.size||0>
   - if <[applied]> >= <script[artifact_data].data_key[settings.max_per_item]>:
@@ -168,3 +169,39 @@ artifact_world:
     - stop if:!<util.random_chance[<[chance]>]>
     - define duration <script[artifact_data].data_key[artifacts.slowness.duration]>
     - cast slow duration:<[duration]> <context.entity>
+
+    #soulless
+    on entity damaged by player with:item_flagged:artifacts.soulless:
+    - define chance <script[artifact_data].data_key[artifacts.soulless.chance]>
+    - if !<util.random_chance[<[chance]>]> || !<context.entity.is_monster>:
+      - stop
+    - define mul <script[artifact_data].data_key[artifacts.soulless.multiplier]>
+    - determine <context.damage.mul[<[mul]>]> passively
+    - wait 10t
+    - narrate <context.entity.health||0>
+
+    #hunter
+    on entity damaged by player with:item_flagged:artifacts.hunter:
+    - define chance <script[artifact_data].data_key[artifacts.hunter.chance]>
+    - if !<util.random_chance[<[chance]>]> || ( <context.entity.is_monster> || !<context.entity.is_mob> ):
+      - stop
+    - define mul <script[artifact_data].data_key[artifacts.hunter.multiplier]>
+    - determine <context.damage.mul[<[mul]>]>
+
+    #critical
+    on entity damaged by player with:item_flagged:artifacts.critical:
+    - define chance <script[artifact_data].data_key[artifacts.critical.chance]>
+    - if !<util.random_chance[<[chance]>]>:
+      - stop
+    - define mul <script[artifact_data].data_key[artifacts.critical.multiplier]>
+    - determine <context.damage.mul[<[mul]>]> passively
+
+    #headhunter
+    on entity dies by:player:
+    - if <context.entity.entity_type> !in <script[artifact_data].data_key[artifacts.headhunter.mobs].keys>:
+      - stop
+    - stop if:!<context.damager.item_in_hand.has_flag[artifacts.headhunter]>
+    - define chance <script[artifact_data].data_key[artifacts.headhunter.chance]>
+    - stop if:!<util.random_chance[<[chance]>]>
+    - define head <script[artifact_data].data_key[artifacts.headhunter.mobs.<context.entity.entity_type>].as[item]>
+    - determine <context.drops.include[<[head]>]> if:!<context.drops.contains[<[head]>]>

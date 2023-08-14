@@ -1,5 +1,6 @@
 artifact_constructor:
   type: procedure
+  debug: false
   definitions: artifact
   script:
   - define material <script[artifact_data].data_key[settings.material]>
@@ -17,6 +18,7 @@ artifact_constructor:
 
 artifact_command:
   type: command
+  debug: false
   name: artifact
   usage: /artifact name
   description: Obtain an artifact

@@ -243,3 +243,64 @@ artifact_data:
       - Sword
       chance: 30
       duration: 10s
+    soulless:
+      display: <&a>Soulless Artifact
+      apply_lore:
+      - <&a>☼ Soulless
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Deals extra damage to hostile mobs
+      tools:
+      - Axe
+      - Sword
+      chance: 100
+      multiplier: 1.25
+    hunter:
+      display: <&a>Hunter Artifact
+      apply_lore:
+      - <&a>☼ Hunter
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Deals extra damage to friendly mobs
+      tools:
+      - Axe
+      - Sword
+      chance: 65
+      multiplier: 1.25
+    critical:
+      display: <&a>Critical Artifact
+      apply_lore:
+      - <&a>☼ Critical
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Chance to critically injure enemy
+      tools:
+      - Axe
+      - Sword
+      chance: 7.5
+      multiplier: 1.45
+    headhunter:
+      display: <&a>Head Hunter Artifact
+      apply_lore:
+      - <&a>☼ Head Hunter
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Chance to drop enemy head item
+      tools:
+      - Axe
+      - Sword
+      chance: 100
+      mobs:
+        zombie: zombie_head
+        creeper: creeper_head
+        piglin: piglin_head
+        skeleton: skeleton_skull
+        wither_skeleton: wither_skeleton_skull
