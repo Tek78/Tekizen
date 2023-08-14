@@ -2,10 +2,8 @@ artifact_data:
   type: data
   settings:
     #the maximum amount of artifacts applied on items
-    max_per_item: 3
-    #chance to drop from mobs
-    chance_to_drop: 1
-    #the artifact material
+    max_per_item: 5
+    #the artifact item material
     material: paper
     #the custom model data for the material
     custom_model: 10001
@@ -112,7 +110,6 @@ artifact_data:
       - Hoe
       - Sword
       - Axe
-      - Trident
       - Shovel
     lavawalker:
       display: <&a>Lavawalker Artifact
@@ -255,7 +252,7 @@ artifact_data:
       tools:
       - Axe
       - Sword
-      chance: 100
+      chance: 65
       multiplier: 1.25
     hunter:
       display: <&a>Hunter Artifact
@@ -265,7 +262,7 @@ artifact_data:
       - <&7>Drag and drop on a tool to
       - <&7>apply this artifact to it.
       - <empty>
-      - <&7>Deals extra damage to friendly mobs
+      - <&7>Deals extra damage to animals
       tools:
       - Axe
       - Sword
@@ -297,7 +294,7 @@ artifact_data:
       tools:
       - Axe
       - Sword
-      chance: 100
+      chance: 12
       mobs:
         zombie: zombie_head
         creeper: creeper_head

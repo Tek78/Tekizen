@@ -39,8 +39,9 @@ artifact_world:
     #telepathy + auto smelt handler
     on player breaks block with:item_flagged:artifacts:
     - ratelimit <player> 1t
-    - if <player.item_in_hand.has_flag[artifacts.auto_smelt]>:
-      - define drop <script[artifact_data].data_key[artifacts.auto_smelt.ores.<context.material.name>]||null>
+    - if !<player.item_in_hand.has_flag[artifacts.auto_smelt]> && !<player.item_in_hand.has_flag[artifacts.telepathy]>:
+      - stop
+    - define drop <script[artifact_data].data_key[artifacts.auto_smelt.ores.<context.material.name>]||null> if:<player.item_in_hand.has_flag[artifacts.auto_smelt]>
     - if <[drop]||null> == null:
       - define drop <context.location.drops[<player.item_in_hand>]>
     - if <player.item_in_hand.has_flag[artifacts.telepathy]>:
@@ -171,20 +172,16 @@ artifact_world:
     - cast slow duration:<[duration]> <context.entity>
 
     #soulless
-    on entity damaged by player with:item_flagged:artifacts.soulless:
+    on monster damaged by player with:item_flagged:artifacts.soulless:
     - define chance <script[artifact_data].data_key[artifacts.soulless.chance]>
-    - if !<util.random_chance[<[chance]>]> || !<context.entity.is_monster>:
-      - stop
+    - stop if:!<util.random_chance[<[chance]>]>
     - define mul <script[artifact_data].data_key[artifacts.soulless.multiplier]>
     - determine <context.damage.mul[<[mul]>]> passively
-    - wait 10t
-    - narrate <context.entity.health||0>
 
     #hunter
-    on entity damaged by player with:item_flagged:artifacts.hunter:
+    on animal damaged by player with:item_flagged:artifacts.hunter:
     - define chance <script[artifact_data].data_key[artifacts.hunter.chance]>
-    - if !<util.random_chance[<[chance]>]> || ( <context.entity.is_monster> || !<context.entity.is_mob> ):
-      - stop
+    - stop if:!<util.random_chance[<[chance]>]>
     - define mul <script[artifact_data].data_key[artifacts.hunter.multiplier]>
     - determine <context.damage.mul[<[mul]>]>
 
