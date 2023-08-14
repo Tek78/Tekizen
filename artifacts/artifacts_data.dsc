@@ -12,7 +12,7 @@ artifact_data:
     #lore for artifact
   artifacts:
     auto_smelt:
-      script: auto_smelt_artifact
+      display: <&a>Auto Smelt Artifact
       apply_lore:
       - <&a>☼ Auto Smelt
       lore:
@@ -31,7 +31,7 @@ artifact_data:
         deepslate_gold_ore: gold_ingot
         nether_gold_ore: gold_ingot
     telepathy:
-      script: telepathy_artifact
+      display: <&a>Telepathy Artifact
       apply_lore:
       - <&a>☼ Telepathy
       lore:
@@ -46,7 +46,7 @@ artifact_data:
       - Hoe
       - Shovel
     withering:
-      script: withering_artifact
+      display: <&a>Withering Artifact
       apply_lore:
       - <&a>☼ Withering
       lore:
@@ -61,7 +61,7 @@ artifact_data:
       duration: 5s
       chance: 20
     allure:
-      script: allure_artifact
+      display: <&a>Allure Artifact
       apply_lore:
       - <&a>☼ Allure
       lore:
@@ -73,7 +73,7 @@ artifact_data:
       - Sword
       - Axe
     lightweight:
-      script: lightweight_artifact
+      display: <&a>Lightweight Artifact
       apply_lore:
       - <&a>☼ Lightweight
       lore:
@@ -84,7 +84,7 @@ artifact_data:
       tools:
       - Boots
     overlord:
-      script: overlord_artifact
+      display: <&a>Overlord Artifact
       apply_lore:
       - <&a>☼ Overlord
       lore:
@@ -98,7 +98,7 @@ artifact_data:
       - Leggings
       - Boots
     reforged:
-      script: reforged_artifact
+      display: <&a>Reforged Artifact
       apply_lore:
       - <&a>☼ Reforged
       lore:
@@ -115,7 +115,7 @@ artifact_data:
       - Trident
       - Shovel
     lavawalker:
-      script: lavawalker_artifact
+      display: <&a>Lavawalker Artifact
       apply_lore:
       - <&a>☼ Lava Walker
       lore:
@@ -126,7 +126,7 @@ artifact_data:
       tools:
       - Boots
     unforged:
-      script: unforged_artifact
+      display: <&a>Unforged Artifact
       apply_lore:
       - <&a>☼ Unforged
       lore:
@@ -142,9 +142,9 @@ artifact_data:
       - Shovel
       chance: 15
     lifesteal:
-      script: lifesteal_artifact
+      display: <&a>Lifesteal
       apply_lore:
-      - <&a>☼ Unforged
+      - <&a>☼ Lifesteal
       lore:
       - <&7>Drag and drop on a tool to
       - <&7>apply this artifact to it.
@@ -155,7 +155,7 @@ artifact_data:
       - Axe
       chance: 15
     replant:
-      script: replant_artifact
+      display: <&a>Replant Artifact
       apply_lore:
       - <&a>☼ Replant
       lore:
@@ -172,7 +172,7 @@ artifact_data:
         potatoes: potato
         beetroots: beetroot_seeds
     bleed:
-      script: bleed_artifact
+      display: <&a>Bleed Artifact
       apply_lore:
       - <&a>☼ Bleed
       lore:
@@ -187,7 +187,7 @@ artifact_data:
       chance: 35
       duration: 6s
     lightning:
-      script: lightning_artifact
+      display: <&a>Lightining Artifact
       apply_lore:
       - <&a>☼ Lightning
       lore:
@@ -200,7 +200,7 @@ artifact_data:
       - Crossbow
       chance: 15
     explosion:
-      script: explosion_artifact
+      display: <&a>Explosion Artifact
       apply_lore:
       - <&a>☼ Explosion
       lore:
@@ -213,7 +213,7 @@ artifact_data:
       - Crossbow
       chance: 15
     scanner:
-      script: scanner_artifact
+      display: <&a>Scanner Artifact
       apply_lore:
       - <&a>☼ Scanner
       lore:
@@ -228,7 +228,7 @@ artifact_data:
       range: 15
       duration: 12s
     slowness:
-      script: slowness_artifact
+      display: <&a>Slowness Artifact
       apply_lore:
       - <&a>☼ Slowness
       lore:

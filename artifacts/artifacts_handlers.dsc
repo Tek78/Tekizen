@@ -1,18 +1,3 @@
-#proc for tool apply lore
-artifacts_tool:
-  type: procedure
-  definitions: artifact_data
-  script:
-  - define tools <[artifact_data].get[tools]>
-  - define applicaple "<&6>Applies to: <&e><[tools].separated_by[<&7>, <&e>].split_lines_by_width[100]>"
-  - define lore <list[<[applicaple]>]>
-  - define info <list[Chance|Duration|Range]>
-  - foreach <[info]>:
-    - foreach next if:!<[artifact_data].contains[<[value]>]>
-    - define val "<&6><[value]>: <&7><[artifact_data].get[<[value]>]>"
-    - define lore <[lore].include[<[val]>]>
-  - determine <[lore]>
-
 apply_task:
   type: task
   script:
