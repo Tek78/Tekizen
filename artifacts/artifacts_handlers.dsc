@@ -32,6 +32,19 @@ artifact_world:
     - determine cancelled passively
     - inject apply_task
 
+    #equip + unequip flag handler
+    after player equips item_flagged:artifacts:
+    - foreach <context.new_item.flag[artifacts].keys>:
+      - define flag <script[artifact_data].data_key[artifacts.<[value]>.flag_name]||null>
+      - flag player <[flag]> if:<[flag].is_truthy>
+      - wait 1t
+    after player unequips item_flagged:artifacts:
+    - foreach <context.old_item.flag[artifacts].keys>:
+      - define flag <script[artifact_data].data_key[artifacts.<[value]>.flag_name]||null>
+      - foreach next if:<player.equipment.filter[has_flag[artifacts.<[value]>]].is_truthy>
+      - flag player <[flag]>:! if:<[flag].is_truthy>
+      - wait 1t
+
     #telepathy + auto smelt handler
     on player breaks block with:item_flagged:artifacts:
     - ratelimit <player> 1t
@@ -75,12 +88,7 @@ artifact_world:
     - define lore <context.item.lore.exclude[<script[artifact_data].parsed_key[artifacts.reforged.lore]>]>
     - give item:<context.item.with_flag[artifacts.reforged:!].with[lore=<[lore]>;durability=0]> slot:hand
 
-    #lavawalker
-    on player equips item_flagged:artifacts.lavawalker:
-    - flag player lavawalk
-    on player unequips item_flagged:artifacts.lavawalker:
-    - flag player lavawalk:!
-    on player steps on lava flagged:lavawalk:
+    on player steps on lava flagged:artifacts_lavawalker:
     - define blocks <context.new_location.find_blocks[lava].within[2]>
     - modifyblock <[blocks]> obsidian
     - wait 5s
@@ -198,3 +206,27 @@ artifact_world:
     - stop if:!<util.random_chance[<[chance]>]>
     - define head <script[artifact_data].data_key[artifacts.headhunter.mobs.<context.entity.entity_type>].as[item]>
     - determine <context.drops.include[<[head]>]> if:!<context.drops.contains[<[head]>]>
+
+    #regen
+    after player damaged by monster flagged:artifacts_regen:
+    - ratelimit <player> 1s
+    - define chance <script[artifact_data].data_key[artifacts.regen.chance]>
+    - if !<util.random_chance[<[chance]>]> || <player.health> == <player.health_max>:
+      - stop
+    - heal <script[artifact_data].data_key[artifacts.regen.heal]>
+
+    on player damaged by monster flagged:artifacts_mitigation:
+    - ratelimit <player> 1s
+    - define chance <script[artifact_data].data_key[artifacts.mitigation.chance]>
+    - stop if:!<util.random_chance[<[chance]>]>
+    - define mul <script[artifact_data].data_key[artifacts.mitigation.multiplier]>
+    - determine <context.damage.mul[<[mul]>]>
+
+    on monster knocks back player flagged:artifacts_anti_knock:
+    - ratelimit <player> 1s
+    - define chance <script[artifact_data].data_key[artifacts.anti_knockback.chance]>
+    - stop if:!<util.random_chance[<[chance]>]>
+    - define mul <script[artifact_data].data_key[artifacts.anti_knockback.multiplier]>
+    - determine <context.acceleration.mul[<[mul]>]>
+
+    #shoot for knockback armor w speed arg

@@ -122,6 +122,7 @@ artifact_data:
       - <&7>Walk over lava
       tools:
       - Boots
+      flag_name: artifacts_lavawalker
     unforged:
       display: <&a>Unforged Artifact
       apply_lore:
@@ -281,6 +282,7 @@ artifact_data:
       - Axe
       - Sword
       chance: 7.5
+      #higher mul => higher damage
       multiplier: 1.45
     headhunter:
       display: <&a>Head Hunter Artifact
@@ -301,3 +303,56 @@ artifact_data:
         piglin: piglin_head
         skeleton: skeleton_skull
         wither_skeleton: wither_skeleton_skull
+    regen:
+      display: <&a>Regen Artifact
+      apply_lore:
+      - <&a>☼ Regen
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Chance to heal when attacked
+      tools:
+      - Helmet
+      - Chestplate
+      - Leggings
+      - Boots
+      chance: 45
+      heal: 4.5
+      flag_name: artifacts_regen
+    mitigation:
+      display: <&a>Mitigation Artifact
+      apply_lore:
+      - <&a>☼ Mitigation
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Chance to mitigate damage
+      tools:
+      - Helmet
+      - Chestplate
+      - Leggings
+      - Boots
+      chance: 45
+      #higher mul => less mitigation
+      multiplier: 0.75
+      flag_name: artifacts_mitigation
+    anti_knockback:
+      display: <&a>Anti Knockback Artifact
+      apply_lore:
+      - <&a>☼ Anti Knockback
+      lore:
+      - <&7>Drag and drop on a tool to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Chance to lessen knockback when attacked
+      tools:
+      - Helmet
+      - Chestplate
+      - Leggings
+      - Boots
+      chance: 100
+      #lesser mul => less knockback
+      multiplier: 0.75
+      flag_name: artifacts_anti_knock
