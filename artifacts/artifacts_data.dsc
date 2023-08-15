@@ -14,7 +14,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Auto Smelt
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Smelts the ores you mine
@@ -33,7 +33,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Telepathy
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Transfers broken items to
@@ -48,7 +48,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Withering
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Applies Wither effect to enemy
@@ -63,7 +63,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Allure
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Pulls enemies towards you
@@ -75,7 +75,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Lightweight
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Grants Snow Falling while equipped
@@ -86,7 +86,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Overlord
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Grants an extra heart of health
@@ -100,7 +100,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Reforged
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Restores durability and removes
@@ -116,19 +116,19 @@ artifact_data:
       apply_lore:
       - <&a>☼ Lava Walker
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Walk over lava
       tools:
       - Boots
-      flag_name: artifacts_lavawalker
+      apply_flag: true
     unforged:
       display: <&a>Unforged Artifact
       apply_lore:
       - <&a>☼ Unforged
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Chance to retain durability
@@ -144,7 +144,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Lifesteal
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Chance to heal when attacking
@@ -157,7 +157,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Replant
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Replants crops by right clicking them
@@ -174,7 +174,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Bleed
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Makes the enemy bleed and hurt
@@ -189,7 +189,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Lightning
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Chance to strike lightning on hit
@@ -202,7 +202,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Explosion
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Chance to cause explosion on hit
@@ -215,7 +215,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Scanner
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Makes entities around the shot
@@ -230,7 +230,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Slowness
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Gives enemy slowness
@@ -246,7 +246,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Soulless
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Deals extra damage to hostile mobs
@@ -260,7 +260,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Hunter
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Deals extra damage to animals
@@ -274,7 +274,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Critical
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Chance to critically injure enemy
@@ -289,7 +289,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Head Hunter
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Chance to drop enemy head item
@@ -308,7 +308,7 @@ artifact_data:
       apply_lore:
       - <&a>☼ Regen
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Chance to heal when attacked
@@ -319,13 +319,13 @@ artifact_data:
       - Boots
       chance: 45
       heal: 4.5
-      flag_name: artifacts_regen
+      apply_flag: true
     mitigation:
       display: <&a>Mitigation Artifact
       apply_lore:
       - <&a>☼ Mitigation
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Chance to mitigate damage
@@ -337,13 +337,13 @@ artifact_data:
       chance: 45
       #higher mul => less mitigation
       multiplier: 0.75
-      flag_name: artifacts_mitigation
+      apply_flag: true
     anti_knockback:
       display: <&a>Anti Knockback Artifact
       apply_lore:
       - <&a>☼ Anti Knockback
       lore:
-      - <&7>Drag and drop on a tool to
+      - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
       - <&7>Chance to lessen knockback when attacked
@@ -352,7 +352,23 @@ artifact_data:
       - Chestplate
       - Leggings
       - Boots
-      chance: 100
+      chance: 45
       #lesser mul => less knockback
       multiplier: 0.75
-      flag_name: artifacts_anti_knock
+      apply_flag: true
+    knockback:
+      display: <&a>Knockback Artifact
+      apply_lore:
+      - <&a>☼ Knockback
+      lore:
+      - <&7>Drag and drop on an item to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Knockback entities when attacked
+      tools:
+      - Helmet
+      - Chestplate
+      - Leggings
+      - Boots
+      chance: 45
+      apply_flag: true
