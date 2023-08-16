@@ -41,9 +41,9 @@ artifact_world:
     after player unequips item_flagged:artifacts:
     - foreach <context.old_item.flag[artifacts]>:
       - foreach next if:!<script[artifact_data].data_key[artifacts.<[key]>].contains[apply_flag]>
-      - flag player artifacts.<[key]>:! if:!<player.equipment.filter[has_flag[artifacts.<[key]>]].is_truthy>
+      - flag player artifacts.<[key]>:! if:!<player.equipment.filter[has_flag[artifacts.<[key]>]].any>
       - wait 1t
-    - flag player artifacts:! if:!<player.flag[artifacts].is_truthy>
+    - flag player artifacts:! if:!<player.flag[artifacts].any>
 
     #telepathy + auto smelt + experience handler
     on player breaks block with:item_flagged:artifacts:
