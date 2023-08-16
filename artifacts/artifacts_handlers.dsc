@@ -45,17 +45,22 @@ artifact_world:
       - wait 1t
     - flag player artifacts:! if:!<player.flag[artifacts].is_truthy>
 
-    #telepathy + auto smelt handler
+    #telepathy + auto smelt + experience handler
     on player breaks block with:item_flagged:artifacts:
     - ratelimit <player> 1t
-    - if !<player.item_in_hand.has_flag[artifacts.auto_smelt]> && !<player.item_in_hand.has_flag[artifacts.telepathy]>:
+    - if !<player.item_in_hand.has_flag[artifacts.auto_smelt]> && !<player.item_in_hand.has_flag[artifacts.telepathy]> && !<player.item_in_hand.has_flag[artifacts.experience]>:
       - stop
+    - define xp <context.xp>
+    - if <player.item_in_hand.has_flag[artifacts.experience]> && <[xp]> != 0:
+      - define mul <script[artifact_data].data_key[artifacts.experience.multiplier]>
+      - define xp <context.xp.add[<context.xp.mul[<[mul]>]>]>
     - define drop <script[artifact_data].data_key[artifacts.auto_smelt.ores.<context.material.name>]||null> if:<player.item_in_hand.has_flag[artifacts.auto_smelt]>
     - if <[drop]||null> == null:
       - define drop <context.location.drops[<player.item_in_hand>]>
+    - determine <[xp].round> passively if:<[xp].is_truthy>
     - if <player.item_in_hand.has_flag[artifacts.telepathy]>:
       - give <[drop]>
-      - determine NOTHING
+      - determine air
     - determine <[drop]>
 
     #withering handler

@@ -372,3 +372,16 @@ artifact_data:
       - Boots
       chance: 45
       apply_flag: true
+    experience:
+      display: <&a>Experience Artifact
+      apply_lore:
+      - <&a>☼ Experience
+      lore:
+      - <&7>Drag and drop on an item to
+      - <&7>apply this artifact to it.
+      - <empty>
+      - <&7>Gain more experience from mining
+      tools:
+      - Pickaxe
+      #higher mul => more exp
+      multiplier: 1.5
