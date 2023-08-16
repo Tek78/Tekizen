@@ -15,7 +15,7 @@ artifacts_shop:
   procedural items:
   - if !<player.has_flag[artifacts_shop]>:
     - determine <item[artifact_unreavealed_item].repeat_as_list[3]>
-  - if <player.flag[artifacts_shop].size> < 4:
+  - if <player.flag[artifacts_shop].size> < 3:
     - define revealed <player.flag[artifacts_shop].size>
     - define unrevealed <element[3].sub[<[revealed]>]>
     - determine <player.flag[artifacts_shop].include[<item[artifact_unreavealed_item].repeat_as_list[<[unrevealed]>]>]>
