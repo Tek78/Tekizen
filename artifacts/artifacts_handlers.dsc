@@ -45,10 +45,10 @@ artifact_world:
       - wait 1t
     - flag player artifacts:! if:!<player.flag[artifacts].any>
 
-    #telepathy + auto smelt + experience handler
+    #telekinesis + auto smelt + experience handler
     on player breaks block with:item_flagged:artifacts:
     - ratelimit <player> 1t
-    - if !<player.item_in_hand.has_flag[artifacts.auto_smelt]> && !<player.item_in_hand.has_flag[artifacts.telepathy]> && !<player.item_in_hand.has_flag[artifacts.experience]>:
+    - if !<player.item_in_hand.has_flag[artifacts.auto_smelt]> && !<player.item_in_hand.has_flag[artifacts.telekinesis]> && !<player.item_in_hand.has_flag[artifacts.experience]>:
       - stop
     - define xp <context.xp>
     - if <player.item_in_hand.has_flag[artifacts.experience]> && <[xp]> != 0:
@@ -58,7 +58,7 @@ artifact_world:
     - if <[drop]||null> == null:
       - define drop <context.location.drops[<player.item_in_hand>]>
     - determine <[xp].round> passively if:<[xp].is_truthy>
-    - if <player.item_in_hand.has_flag[artifacts.telepathy]>:
+    - if <player.item_in_hand.has_flag[artifacts.telekinesis]>:
       - give <[drop]>
       - determine air
     - determine <[drop]>

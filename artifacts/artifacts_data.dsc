@@ -28,10 +28,10 @@ artifact_data:
         gold_ore: gold_ingot
         deepslate_gold_ore: gold_ingot
         nether_gold_ore: gold_ingot
-    telepathy:
-      display: <&a>Telepathy Artifact
+    telekinesis:
+      display: <&a>Telekinesis Artifact
       apply_lore:
-      - <&a>☼ Telepathy
+      - <&a>☼ Telekinesis
       lore:
       - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
