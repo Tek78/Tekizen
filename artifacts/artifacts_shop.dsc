@@ -1,9 +1,9 @@
-artifacts_cooldown_item:
+artifact_unreavealed_item:
   type: item
   material: paper
-  display name: <&a>Shop resets in<&co>
-  lore:
-  - <&7><player.flag_expiration[artifacts_shop].from_now.formatted||0s>
+  display name: <&color[#6c2cf5]>Click to Reveal
+  mechanisms:
+    custom_model_data: 10149
 
 artifacts_shop:
   type: inventory
@@ -11,16 +11,23 @@ artifacts_shop:
   size: 9
   definitions:
     pane: black_stained_glass_pane
+  gui: true
   procedural items:
-  - determine air if:!<player.has_flag[artifacts_shop]>
-  - determine <player.flag[artifacts_shop].parse[proc[artifact_constructor]]>
+  - if !<player.has_flag[artifacts_shop]>:
+    - determine <item[artifact_unreavealed_item].repeat_as_list[3]>
+  - if <player.flag[artifacts_shop].size> < 4:
+    - define revealed <player.flag[artifacts_shop].size>
+    - define unrevealed <element[3].sub[<[revealed]>]>
+    - determine <player.flag[artifacts_shop].include[<item[artifact_unreavealed_item].repeat_as_list[<[unrevealed]>]>]>
+  - determine <player.flag[artifacts_shop]>
   slots:
-  - [pane] [] [] [] [pane] [pane] [pane] [artifacts_cooldown_item] [pane]
+  - [pane] [] [] [] [pane] [pane] [pane] [pane] [pane]
 
 artifacts_shop_handler:
   type: world
   events:
-    on player opens artifacts_shop flagged:!artifacts_shop:
-    - determine cancelled passively
-    - flag player artifacts_shop:<script[artifact_data].data_key[artifacts].keys.random[3]> expire:1w
-    - inventory open d:artifacts_shop
+    on player clicks artifact_unreavealed_item in artifacts_shop:
+    - define random <script[artifact_data].data_key[artifacts].keys.filter_tag[<player.flag[artifacts_shop].if_null[<list>].contains[<[filter_value].proc[artifact_constructor]>].not>].random>
+    - define item <[random].proc[artifact_constructor]>
+    - flag player artifacts_shop:->:<[item]>
+    - inventory set d:<context.inventory> slot:<context.slot> o:<[item]>
