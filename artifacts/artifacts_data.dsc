@@ -1,3 +1,8 @@
+#DO NOT change/remove 'apply_flag: true' option
+#Any message/lore/text can be changed
+#As well as chances, multipliers or durations
+#All mulitpliers have info on what happens if you change them
+
 artifact_data:
   type: data
   settings:
@@ -7,7 +12,10 @@ artifact_data:
     material: paper
     #the custom model data for the material
     custom_model: 10001
-    #lore for artifact
+    #price range for artifacts
+    price: <util.random.int[2000].to[5000]>
+    #shop reset announce message
+    shop_reset_message: <&a>The Arifacts Shop has been reset!
   artifacts:
     auto_smelt:
       display: <&a>Auto Smelt Artifact

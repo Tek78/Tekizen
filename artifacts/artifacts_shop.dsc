@@ -5,13 +5,18 @@ artifact_unreavealed_item:
   flags:
     artifact: unset
   mechanisms:
-    custom_model_data: 10003
+    custom_model_data: 10151
+
+artifact_reset_item:
+  type: item
+  material: recovery_compass
+  display name: <&color[#6c2cf5]>Resets in: <&a><util.time_now.next_day_of_week[sunday].from_now.formatted>
 
 artifacts_shop:
   type: inventory
   inventory: chest
   size: 9
-  title: <&color[#6c2cf5]>  Artifact Shop <&9>| <&color[#6c2cf5]>Resets: <&8><util.time_now.next_day_of_week[sunday].from_now.formatted>
+  title: <&f>
   definitions:
     pane: black_stained_glass_pane
   gui: true
@@ -20,7 +25,7 @@ artifacts_shop:
     - determine <item[artifact_unreavealed_item].repeat_as_list[3]>
   - determine <player.flag[artifacts_shop]>
   slots:
-  - [pane] [pane] [] [pane] [] [pane] [] [pane] [pane]
+  - [air] [] [air] [] [air] [] [air] [artifact_reset_item] [air]
 
 artifacts_shop_handler:
   type: world
@@ -37,10 +42,10 @@ artifacts_shop_handler:
         - stop
       - define random <script[artifact_data].data_key[artifacts].keys.filter_tag[<player.flag[artifacts_shop].parse[flag[artifact]].if_null[<list>].contains[<[filter_value]>].not>].random>
       - define item <[random].proc[artifact_constructor]>
-      - define price <util.random.int[1000].to[2500]>
+      - define price <script[artifact_data].parsed_key[settings.price]>
       - define lore "<n><&6>Price: <&7><[price]>"
       - define lore <[item].lore.include[<[lore]>]>
-      - define cmd <list[10003|10004]>
+      - define cmd <list[10151|10150]>
       - flag player artifact_rolling
       - inventory adjust slot:<context.slot> d:<context.inventory> display:<&e>Rolling...
       #rolling code
@@ -83,7 +88,7 @@ artifacts_shop_handler:
     - if <util.time_now.day_of_week_name> != Sunday:
       - stop
     - flag <server.players_flagged[artifacts_shop]> artifacts_shop:!
-    - announce "<&a>Artifacts Shop <&7>has been reset!"
+    - announce <script[artifact_data].parsed_key[settings.shop_reset_message]>
 
 center_text:
   type: procedure
