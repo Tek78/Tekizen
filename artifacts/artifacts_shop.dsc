@@ -11,6 +11,7 @@ artifacts_shop:
   type: inventory
   inventory: chest
   size: 9
+  title: <&color[#6c2cf5]>  Artifact Shop <&9>| <&color[#6c2cf5]>Resets: <&8><util.time_now.next_day_of_week[sunday].from_now.formatted>
   definitions:
     pane: black_stained_glass_pane
   gui: true
@@ -34,7 +35,7 @@ artifacts_shop_handler:
       - if <player.has_flag[artifact_rolling]>:
         - narrate "Finish rolling first.."
         - stop
-      - define random <script[artifact_data].data_key[artifacts].keys.filter_tag[<player.flag[artifacts_shop].parse[flag[artifact.artifact]].if_null[<list>].contains[<[filter_value]>].not>].random>
+      - define random <script[artifact_data].data_key[artifacts].keys.filter_tag[<player.flag[artifacts_shop].parse[flag[artifact]].if_null[<list>].contains[<[filter_value]>].not>].random>
       - define item <[random].proc[artifact_constructor]>
       - define price <util.random.int[1000].to[2500]>
       - define lore "<n><&6>Price: <&7><[price]>"
