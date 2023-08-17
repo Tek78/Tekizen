@@ -3,7 +3,8 @@ artifact_unreavealed_item:
   material: paper
   display name: <&color[#6c2cf5]>Click to Reveal
   flags:
-    artifact: unset
+    artifact:
+      artifact: unset
   mechanisms:
     custom_model_data: 10149
 
@@ -32,19 +33,27 @@ artifacts_shop_handler:
   type: world
   events:
     on player clicks item_flagged:artifact in artifacts_shop:
-    - if <context.item.flag[artifact]> == unset:
-      - define random <script[artifact_data].data_key[artifacts].keys.filter_tag[<player.flag[artifacts_shop].if_null[<list>].contains[<[filter_value].proc[artifact_constructor]>].not>].random>
+    - if <context.item.flag[artifact.artifact]> == unset:
+      - if <player.has_flag[artifact_rolling]>:
+        - narrate "Finish rolling first.."
+        - stop
+      - define random <script[artifact_data].data_key[artifacts].keys.filter_tag[<player.flag[artifacts_shop].parse[flag[artifact.artifact]].if_null[<list>].contains[<[filter_value]>].not>].random>
       - define item <[random].proc[artifact_constructor]>
       - define price <util.random.int[1000].to[2500]>
       - define lore "<n><&6>Price: <&7><[price]>"
       - define lore <[item].lore.include[<[lore]>]>
       - define cmd <list[10002|100001]>
+      - flag player artifact_rolling
       - repeat 5:
         - foreach <[cmd]> as:model:
+          - if <player.open_inventory> != <context.inventory>:
+            - stop
           - inventory set d:<context.inventory> slot:<context.slot> o:<item[artifact_rolling_item].with[custom_model_data=<[model]>]>
           - playsound <player> sound:item_trident_hit pitch:1.65 volume:1.25
           - wait 5t
       - inventory set d:<context.inventory> slot:<context.slot> o:<[item].with[lore=<[lore]>].with_flag[artifact.artifact:<[random]>].with_flag[artifact.price:<[price]>]>
+      - flag player artifact_rolling:!
+      - flag player artifacts_shop:<context.inventory.list_contents.filter[has_flag[artifact]]>
       - stop
     - if !<context.item.flag[artifact].contains[purchased]>:
       - define price <context.item.flag[artifact.price]>
@@ -55,10 +64,11 @@ artifacts_shop_handler:
       - give item:<context.item.flag[artifact.artifact].proc[artifact_constructor]>
       - inventory flag slot:<context.slot> d:<context.inventory> artifact.purchased:true
       - inventory adjust slot:<context.slot> d:<context.inventory> "lore:<n>   <proc[purshased_proc]>   <n>"
+      - flag player artifacts_shop:<context.inventory.list_contents.filter[has_flag[artifact]]>
       - stop
     - narrate "You've already bough this! Come back after reset."
-    on player closes artifacts_shop:
-    - flag player artifacts_shop:<context.inventory.list_contents.filter[has_flag[artifact]]>
+    on player closes artifacts_shop flagged:artifact_rolling:
+    - flag player artifact_rolling:!
 
 purshased_proc:
     type: procedure
