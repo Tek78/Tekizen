@@ -43,7 +43,7 @@ artifact_world:
       - foreach next if:!<script[artifact_data].data_key[artifacts.<[key]>].contains[apply_flag]>
       - flag player artifacts.<[key]>:! if:!<player.equipment.filter[has_flag[artifacts.<[key]>]].any>
       - wait 1t
-    - flag player artifacts:! if:!<player.flag[artifacts].any>
+    - flag player artifacts:! if:!<player.flag[artifacts].any||true>
 
     #telekinesis + auto smelt + experience handler
     on player breaks block with:item_flagged:artifacts:
@@ -82,10 +82,13 @@ artifact_world:
     on player unequips item_flagged:artifacts.lightweight:
     - cast slow_falling remove
 
-    #overlord handler
-    on player equips item_flagged:artifacts.overlord:
+    #overload handler
+    on player equips item_flagged:artifacts.overload:
+    - define hearts <player.equipment.filter[has_flag[artifacts.overload]].size.mul[2].add[20]>
+    - if <player.health_max> == <[hearts]>:
+      - stop
     - adjust <player> max_health:<player.health_max.add[2]>
-    on player unequips item_flagged:artifacts.overlord:
+    on player unequips item_flagged:artifacts.overload:
     - adjust <player> max_health:<player.health_max.sub[2]>
 
     #reforged

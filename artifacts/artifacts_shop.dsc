@@ -10,7 +10,7 @@ artifact_unreavealed_item:
 artifact_reset_item:
   type: item
   material: recovery_compass
-  display name: <&color[#6c2cf5]>Resets in: <&a><util.time_now.next_day_of_week[sunday].from_now.formatted>
+  display name: <&color[#6c2cf5]>Resets in: <&a><util.time_now.next_day_of_week[sunday].add[12h].from_now.formatted>
 
 artifacts_shop:
   type: inventory

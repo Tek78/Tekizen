@@ -10,8 +10,6 @@ artifact_data:
     max_per_item: 5
     #the artifact item material
     material: paper
-    #the custom model data for the material
-    custom_model: 10001
     #price range for artifacts
     price: <util.random.int[2000].to[5000]>
     #shop reset announce message
@@ -19,6 +17,7 @@ artifact_data:
   artifacts:
     auto_smelt:
       display: <&a>Auto Smelt Artifact
+      model: 10154
       apply_lore:
       - <&a>☼ Auto Smelt
       lore:
@@ -38,6 +37,7 @@ artifact_data:
         nether_gold_ore: gold_ingot
     telekinesis:
       display: <&a>Telekinesis Artifact
+      model: 10168
       apply_lore:
       - <&a>☼ Telekinesis
       lore:
@@ -89,10 +89,11 @@ artifact_data:
       - <&7>Grants Snow Falling while equipped
       tools:
       - Boots
-    overlord:
-      display: <&a>Overlord Artifact
+    overload:
+      display: <&a>Overload Artifact
+      model: 10164
       apply_lore:
-      - <&a>☼ Overlord
+      - <&a>☼ Overload
       lore:
       - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
@@ -105,6 +106,7 @@ artifact_data:
       - Boots
     reforged:
       display: <&a>Reforged Artifact
+      model: 10165
       apply_lore:
       - <&a>☼ Reforged
       lore:
@@ -133,6 +135,7 @@ artifact_data:
       apply_flag: true
     unforged:
       display: <&a>Unforged Artifact
+      model: 10169
       apply_lore:
       - <&a>☼ Unforged
       lore:
@@ -149,6 +152,7 @@ artifact_data:
       chance: 15
     lifesteal:
       display: <&a>Lifesteal
+      model: 10161
       apply_lore:
       - <&a>☼ Lifesteal
       lore:
@@ -162,6 +166,7 @@ artifact_data:
       chance: 15
     replant:
       display: <&a>Replant Artifact
+      model: 10155
       apply_lore:
       - <&a>☼ Replant
       lore:
@@ -179,6 +184,7 @@ artifact_data:
         beetroots: beetroot_seeds
     bleed:
       display: <&a>Bleed Artifact
+      model: 10156
       apply_lore:
       - <&a>☼ Bleed
       lore:
@@ -194,6 +200,7 @@ artifact_data:
       duration: 6s
     lightning:
       display: <&a>Lightining Artifact
+      model: 10162
       apply_lore:
       - <&a>☼ Lightning
       lore:
@@ -207,6 +214,7 @@ artifact_data:
       chance: 15
     explosion:
       display: <&a>Explosion Artifact
+      model: 10159
       apply_lore:
       - <&a>☼ Explosion
       lore:
@@ -251,6 +259,7 @@ artifact_data:
       duration: 10s
     soulless:
       display: <&a>Soulless Artifact
+      model: 10167
       apply_lore:
       - <&a>☼ Soulless
       lore:
@@ -279,6 +288,7 @@ artifact_data:
       multiplier: 1.25
     critical:
       display: <&a>Critical Artifact
+      model: 10157
       apply_lore:
       - <&a>☼ Critical
       lore:
@@ -294,6 +304,7 @@ artifact_data:
       multiplier: 1.45
     headhunter:
       display: <&a>Head Hunter Artifact
+      model: 10160
       apply_lore:
       - <&a>☼ Head Hunter
       lore:
@@ -313,6 +324,7 @@ artifact_data:
         wither_skeleton: wither_skeleton_skull
     regen:
       display: <&a>Regen Artifact
+      model: 10166
       apply_lore:
       - <&a>☼ Regen
       lore:
@@ -330,6 +342,7 @@ artifact_data:
       apply_flag: true
     mitigation:
       display: <&a>Mitigation Artifact
+      model: 10163
       apply_lore:
       - <&a>☼ Mitigation
       lore:
@@ -382,6 +395,7 @@ artifact_data:
       apply_flag: true
     experience:
       display: <&a>Experience Artifact
+      model: 10158
       apply_lore:
       - <&a>☼ Experience
       lore:
