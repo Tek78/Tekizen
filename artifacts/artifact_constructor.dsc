@@ -11,7 +11,8 @@ artifact_constructor:
     - foreach next if:!<[data].contains[<[value]>]>
     - define val "<&6><[value]>: <&7><[data].get[<[value]>]>"
     - define lore <[lore].include[<[val]>]>
-  - definemap properties custom_model_data:<[data].get[model]||10001> display:<[data].get[display]> lore:<[lore]>
+  - define model <[data].get[model]||<script[artifact_data].data_key[settings.generic_model]>>
+  - definemap properties custom_model_data:<[model]> display:<[data].get[display]> lore:<[lore]>
   - determine <item[<[material]>].with_map[<[properties]>].with_flag[artifact:<[artifact]>]>
 
 artifact_command:

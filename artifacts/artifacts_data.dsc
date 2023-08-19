@@ -14,6 +14,13 @@ artifact_data:
     price: <util.random.int[2000].to[5000]>
     #shop reset announce message
     shop_reset_message: <&a>The Arifacts Shop has been reset!
+    rolling_textures:
+    #dim
+    - 10777
+    #bright
+    - 10776
+    #fallback mocel data if there's no `model:`
+    generic_model: 10152
   artifacts:
     auto_smelt:
       display: <&a>Auto Smelt Artifact

@@ -5,7 +5,7 @@ artifact_unreavealed_item:
   flags:
     artifact: unset
   mechanisms:
-    custom_model_data: 10151
+    custom_model_data: 10777
 
 artifact_reset_item:
   type: item
@@ -45,7 +45,7 @@ artifacts_shop_handler:
       - define price <script[artifact_data].parsed_key[settings.price]>
       - define lore "<n><&6>Price: <&7><[price]>"
       - define lore <[item].lore.include[<[lore]>]>
-      - define cmd <list[10151|10150]>
+      - define cmd <script[artifact_data].data_key[settings.rolling_textures]>
       - flag player artifact_rolling
       - inventory adjust slot:<context.slot> d:<context.inventory> display:<&e>Rolling...
       #rolling code
