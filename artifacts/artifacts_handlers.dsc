@@ -144,7 +144,7 @@ artifact_world:
     - while <context.entity.has_flag[bleeding]>:
       - stop if:!<context.entity.is_spawned>
       - playeffect at:<context.entity.location.above[1.2]> effect:RED_DUST special_data:1.4|red offset:0.25 quantity:8
-      - hurt 0.25 <context.entity>
+      - hurt 0.25 <context.entity> source:<player>
       - wait 1s
 
     #lightning
@@ -162,7 +162,7 @@ artifact_world:
     - stop if:!<util.random_chance[<[chance]>]>
     - flag <context.projectile> explosion
     after entity_flagged:explosion hits:
-    - explode power:1.45 <context.projectile.location> fire breakblocks
+    - explode power:1.45 <context.projectile.location> fire breakblocks source:<player>
     - remove <context.projectile>
 
     #scanner

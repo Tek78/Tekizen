@@ -1,3 +1,12 @@
+artifacts_cooldown:
+  type: procedure
+  definitions: day
+  script:
+  - define midday <util.time_now.start_of_day.add[12h]>
+  - if <util.time_now.day_of_week_name> == <[day]> && <util.time_now.is_before[<[midday]>]>:
+    - determine <[midday].from_now.formatted>
+  - determine <util.time_now.next_day_of_week[<[day]>].add[12h].from_now.formatted>
+
 artifact_unreavealed_item:
   type: item
   material: paper
@@ -10,7 +19,7 @@ artifact_unreavealed_item:
 artifact_reset_item:
   type: item
   material: recovery_compass
-  display name: <&color[#6c2cf5]>Resets in: <&a><util.time_now.next_day_of_week[sunday].add[12h].from_now.formatted>
+  display name: <&color[#6c2cf5]>Resets in: <&a><proc[artifacts_cooldown].context[sunday]>
 
 artifacts_shop:
   type: inventory
