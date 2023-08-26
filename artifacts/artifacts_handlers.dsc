@@ -45,10 +45,10 @@ artifact_world:
       - wait 1t
     - flag player artifacts:! if:!<player.flag[artifacts].any||true>
 
-    #telekinesis + auto smelt + experience handler + replant
+    #telekinesis + auto smelt + experience handler
     on player breaks block with:item_flagged:artifacts:
     #stop if they have none of the below enchants
-    - define enchants <list[auto_smelt|replant|experience|telekinesis]>
+    - define enchants <list[auto_smelt|experience|telekinesis]>
     - if !<player.item_in_hand.flag[artifacts].keys.contains_any[<[enchants]>]>:
       - stop
 
@@ -71,15 +71,17 @@ artifact_world:
     #drop handler
     - if <player.item_in_hand.has_flag[artifacts.telekinesis]>:
       - give <[drops]>
-      - determine air passively
-    - else:
-      - determine <[drops]> passively
+      - determine air
+    - determine <[drops]>
 
     #replant handler
-    - if <player.item_in_hand.has_flag[artifacts.replant]> && <[mat].name> in <[data.replant.crops].keys>:
+    after player breaks block with:item_flagged:artifacts.replant:
+    - define data <script[artifact_data].data_key[artifacts]>
+    - define mat <context.material>
+
+    - if <[mat].name> in <[data.replant.crops].keys> && <[mat].age> == <[mat].maximum_age>:
       - define seed <[data.replant.crops.<[mat].name>]>
-      - if <player.inventory.contains_item[<[seed]>]> && <[mat].age> == <[mat].maximum_age>:
-        - wait 5t
+      - if <player.inventory.contains_item[<[seed]>]>:
         - take item:<[seed]>
         - modifyblock <context.location> <[mat].with[age=0]>
 
