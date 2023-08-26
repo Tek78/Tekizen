@@ -45,23 +45,43 @@ artifact_world:
       - wait 1t
     - flag player artifacts:! if:!<player.flag[artifacts].any||true>
 
-    #telekinesis + auto smelt + experience handler
+    #telekinesis + auto smelt + experience handler + replant
     on player breaks block with:item_flagged:artifacts:
-    - ratelimit <player> 1t
-    - if !<player.item_in_hand.has_flag[artifacts.auto_smelt]> && !<player.item_in_hand.has_flag[artifacts.telekinesis]> && !<player.item_in_hand.has_flag[artifacts.experience]>:
+    #stop if they have none of the below enchants
+    - define enchants <list[auto_smelt|replant|experience|telekinesis]>
+    - if !<player.item_in_hand.flag[artifacts].keys.contains_any[<[enchants]>]>:
       - stop
+
+    - define data <script[artifact_data].data_key[artifacts]>
+    - define mat <context.material>
+
+    #define the drops
+    - if <player.item_in_hand.has_flag[artifacts.auto_smelt]> && <[data.auto_smelt.ores].keys> contains <[mat].name>:
+      - define drops <[data.auto_smelt.ores.<[mat].name>]>
+    - else:
+      - define drops <context.location.drops[<player.item_in_hand>]>
+
+    #experience handler
     - define xp <context.xp>
-    - if <player.item_in_hand.has_flag[artifacts.experience]> && <[xp]> != 0:
-      - define mul <script[artifact_data].data_key[artifacts.experience.multiplier]>
-      - define xp <context.xp.add[<context.xp.mul[<[mul]>]>]>
-    - define drop <script[artifact_data].data_key[artifacts.auto_smelt.ores.<context.material.name>]||null> if:<player.item_in_hand.has_flag[artifacts.auto_smelt]>
-    - if <[drop]||null> == null:
-      - define drop <context.location.drops[<player.item_in_hand>]>
-    - determine <[xp].round> passively if:<[xp].is_truthy>
+    - if <player.item_in_hand.has_flag[artifacts.experience]> && <[xp].is_truthy>:
+      - define mul <[data.experience.multiplier]>
+      - define xp <[xp].add[<[xp].mul[<[mul]>]>].round>
+      - determine <[xp]> passively
+
+    #drop handler
     - if <player.item_in_hand.has_flag[artifacts.telekinesis]>:
-      - give <[drop]>
-      - determine air
-    - determine <[drop]>
+      - give <[drops]>
+      - determine air passively
+    - else:
+      - determine <[drops]> passively
+
+    #replant handler
+    - wait 5t
+    - if <player.item_in_hand.has_flag[artifacts.replant]> && <[mat].name> in <[data.replant.crops].keys>:
+      - define seed <[data.replant.crops.<[mat].name>]>
+      - if <player.inventory.contains_item[<[seed]>]> && <[mat].age> == <[mat].maximum_age>:
+        - take item:<[seed]>
+        - modifyblock <context.location> <[mat].with[age=0]>
 
     #withering handler
     after entity damaged by player with:item_flagged:artifacts.withering:
@@ -116,23 +136,6 @@ artifact_world:
     - stop if:!<util.random_chance[<[chance]>]>
     - define heal <context.damage.div[2.5].round_down>
     - heal <[heal]> <player>
-
-    #replant
-    on player right clicks vanilla_tagged:crops with:item_flagged:artifacts.replant:
-    - ratelimit <player> 1t
-    - if <context.location.material.name> !in <script[artifact_data].data_key[artifacts.replant.crops].keys>:
-      - stop
-    - if <context.location.material.age> != <context.location.material.maximum_age>:
-      - stop
-    - define seed <script[artifact_data].data_key[artifacts.replant.crops.<context.location.material.name>]>
-    - stop if:!<player.inventory.contains_item[<[seed]>]>
-    - define drops <context.location.drops[<player.item_in_hand>]>
-    - take item:<[seed]>
-    - adjustblock <context.location> age:0
-    - if <player.item_in_hand.has_flag[artifacts.telepathy]>:
-      - give <[drops]>
-      - stop
-    - drop <[drops]> <context.location.above[0.35]>
 
     #bleed
     after entity damaged by player with:item_flagged:artifacts.bleed:
