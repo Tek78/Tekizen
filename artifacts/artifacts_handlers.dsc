@@ -76,10 +76,10 @@ artifact_world:
       - determine <[drops]> passively
 
     #replant handler
-    - wait 5t
     - if <player.item_in_hand.has_flag[artifacts.replant]> && <[mat].name> in <[data.replant.crops].keys>:
       - define seed <[data.replant.crops.<[mat].name>]>
       - if <player.inventory.contains_item[<[seed]>]> && <[mat].age> == <[mat].maximum_age>:
+        - wait 5t
         - take item:<[seed]>
         - modifyblock <context.location> <[mat].with[age=0]>
 
