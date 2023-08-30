@@ -24,7 +24,7 @@ artifact_data:
   artifacts:
     auto_smelt:
       display: <&a>Auto Smelt Artifact
-      model: 10154
+      model: 10779
       apply_lore:
       - <&a>☼ Auto Smelt
       lore:
@@ -44,7 +44,7 @@ artifact_data:
         nether_gold_ore: gold_ingot
     telekinesis:
       display: <&a>Telekinesis Artifact
-      model: 10168
+      model: 10792
       apply_lore:
       - <&a>☼ Telekinesis
       lore:
@@ -60,6 +60,7 @@ artifact_data:
       - Shovel
     withering:
       display: <&a>Withering Artifact
+      model: 10804
       apply_lore:
       - <&a>☼ Withering
       lore:
@@ -75,6 +76,7 @@ artifact_data:
       chance: 20
     allure:
       display: <&a>Allure Artifact
+      model: 10796
       apply_lore:
       - <&a>☼ Allure
       lore:
@@ -87,6 +89,7 @@ artifact_data:
       - Axe
     lightweight:
       display: <&a>Lightweight Artifact
+      model: 10801
       apply_lore:
       - <&a>☼ Lightweight
       lore:
@@ -98,7 +101,7 @@ artifact_data:
       - Boots
     overload:
       display: <&a>Overload Artifact
-      model: 10164
+      model: 10788
       apply_lore:
       - <&a>☼ Overload
       lore:
@@ -113,7 +116,7 @@ artifact_data:
       - Boots
     reforged:
       display: <&a>Reforged Artifact
-      model: 10165
+      model: 10789
       apply_lore:
       - <&a>☼ Reforged
       lore:
@@ -130,6 +133,7 @@ artifact_data:
       - Shovel
     lavawalker:
       display: <&a>Lavawalker Artifact
+      model: 10800
       apply_lore:
       - <&a>☼ Lava Walker
       lore:
@@ -142,7 +146,7 @@ artifact_data:
       apply_flag: true
     unforged:
       display: <&a>Unforged Artifact
-      model: 10169
+      model: 10793
       apply_lore:
       - <&a>☼ Unforged
       lore:
@@ -159,7 +163,7 @@ artifact_data:
       chance: 15
     lifesteal:
       display: <&a>Lifesteal
-      model: 10161
+      model: 10785
       apply_lore:
       - <&a>☼ Lifesteal
       lore:
@@ -173,7 +177,7 @@ artifact_data:
       chance: 15
     replant:
       display: <&a>Replant Artifact
-      model: 10155
+      model: 10778
       apply_lore:
       - <&a>☼ Replant
       lore:
@@ -191,7 +195,7 @@ artifact_data:
         beetroots: beetroot_seeds
     bleed:
       display: <&a>Bleed Artifact
-      model: 10156
+      model: 10780
       apply_lore:
       - <&a>☼ Bleed
       lore:
@@ -207,7 +211,7 @@ artifact_data:
       duration: 6s
     lightning:
       display: <&a>Lightining Artifact
-      model: 10162
+      model: 101786
       apply_lore:
       - <&a>☼ Lightning
       lore:
@@ -221,7 +225,7 @@ artifact_data:
       chance: 15
     explosion:
       display: <&a>Explosion Artifact
-      model: 10159
+      model: 10783
       apply_lore:
       - <&a>☼ Explosion
       lore:
@@ -235,6 +239,7 @@ artifact_data:
       chance: 15
     scanner:
       display: <&a>Scanner Artifact
+      model: 10802
       apply_lore:
       - <&a>☼ Scanner
       lore:
@@ -250,6 +255,7 @@ artifact_data:
       duration: 12s
     slowness:
       display: <&a>Slowness Artifact
+      model: 10803
       apply_lore:
       - <&a>☼ Slowness
       lore:
@@ -266,7 +272,7 @@ artifact_data:
       duration: 10s
     soulless:
       display: <&a>Soulless Artifact
-      model: 10167
+      model: 10791
       apply_lore:
       - <&a>☼ Soulless
       lore:
@@ -281,6 +287,7 @@ artifact_data:
       multiplier: 1.25
     hunter:
       display: <&a>Hunter Artifact
+      model: 10798
       apply_lore:
       - <&a>☼ Hunter
       lore:
@@ -295,7 +302,7 @@ artifact_data:
       multiplier: 1.25
     critical:
       display: <&a>Critical Artifact
-      model: 10157
+      model: 10781
       apply_lore:
       - <&a>☼ Critical
       lore:
@@ -311,7 +318,7 @@ artifact_data:
       multiplier: 1.45
     headhunter:
       display: <&a>Head Hunter Artifact
-      model: 10160
+      model: 10784
       apply_lore:
       - <&a>☼ Head Hunter
       lore:
@@ -331,7 +338,7 @@ artifact_data:
         wither_skeleton: wither_skeleton_skull
     regen:
       display: <&a>Regen Artifact
-      model: 10166
+      model: 10790
       apply_lore:
       - <&a>☼ Regen
       lore:
@@ -349,7 +356,7 @@ artifact_data:
       apply_flag: true
     mitigation:
       display: <&a>Mitigation Artifact
-      model: 10163
+      model: 10787
       apply_lore:
       - <&a>☼ Mitigation
       lore:
@@ -368,6 +375,7 @@ artifact_data:
       apply_flag: true
     anti_knockback:
       display: <&a>Anti Knockback Artifact
+      model: 10797
       apply_lore:
       - <&a>☼ Anti Knockback
       lore:
@@ -386,6 +394,7 @@ artifact_data:
       apply_flag: true
     knockback:
       display: <&a>Knockback Artifact
+      model: 10799
       apply_lore:
       - <&a>☼ Knockback
       lore:
@@ -402,7 +411,7 @@ artifact_data:
       apply_flag: true
     experience:
       display: <&a>Experience Artifact
-      model: 10158
+      model: 10782
       apply_lore:
       - <&a>☼ Experience
       lore:
