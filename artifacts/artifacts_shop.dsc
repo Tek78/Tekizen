@@ -110,3 +110,13 @@ center_text:
   script:
   - define char <&sp>
   - determine <[char].repeat[6]><[text]><[char].repeat[6]>
+
+#shop assignment
+artifact_shop_assignment:
+  type: assignment
+  actions:
+    on click:
+    - narrate "<&7>Welcome to the Artifacts Market..."
+    - playeffect at:<npc.location.above[1.25]> effect:SOUL quantity:5 offset:0.65
+    - wait 1s
+    - inventory open d:artifacts_shop
