@@ -43,6 +43,10 @@ artifacts_shop_handler:
     #click handlers for shop
     on player clicks item_flagged:artifact in artifacts_shop:
 
+    #make sure they're clicking the shop GUI
+    - if <context.clicked_inventory> != <context.inventory>:
+      - stop
+
     #unset artifact handler
     - if <context.item.flag[artifact]> == unset:
       #if already rolling; stop
