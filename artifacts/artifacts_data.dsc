@@ -96,7 +96,7 @@ artifact_data:
       - <&7>Drag and drop on an item to
       - <&7>apply this artifact to it.
       - <empty>
-      - <&7>Grants Snow Falling while equipped
+      - <&7>Grants Slow Falling while equipped
       tools:
       - Boots
     overload:
@@ -222,7 +222,7 @@ artifact_data:
       tools:
       - Bow
       - Crossbow
-      chance: 100
+      chance: 15
     explosion:
       display: <&a>Explosion Artifact
       model: 10783
