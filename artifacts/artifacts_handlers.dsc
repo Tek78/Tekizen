@@ -1,14 +1,4 @@
 #<locationtag.proc[grief_prevention_check]> <-- if the player owns/is trusted at that location
-grief_prevention_check:
-  type: procedure
-  definitions: loc
-  script:
-  - define claim <[loc].griefprevention.claim||null>
-  - determine true if:!<[claim].is_truthy>
-  - if <[claim].owner> != <player>:
-    - if <player> in <[claim].trusted>:
-      - determine true
-    - determine false
 
 apply_task:
   type: task
