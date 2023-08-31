@@ -1,3 +1,15 @@
+#<locationtag.proc[grief_prevention_check]> <-- if the player owns/is trusted at that location
+grief_prevention_check:
+  type: procedure
+  definitions: loc
+  script:
+  - define claim <[loc].griefprevention.claim||null>
+  - determine true if:!<[claim].is_truthy>
+  - if <[claim].owner> != <player>:
+    - if <player> in <[claim].trusted>:
+      - determine true
+    - determine false
+
 apply_task:
   type: task
   debug: false
@@ -127,11 +139,10 @@ artifact_world:
     #unforged
     on player item_flagged:artifacts.unforged takes damage:
     - define chance <script[artifact_data].data_key[artifacts.unforged.chance]>
-    - if <util.random_chance[<[chance]>]>:
-      - determine cancelled
+    - determine cancelled if:<util.random_chance[<[chance]>]>
 
     #lifesteal
-    on entity damaged by player with:item_flagged:artifacts.lifesteal:
+    after entity damaged by player with:item_flagged:artifacts.lifesteal:
     - if <player.health> == <player.health_max>:
       - stop
     - define chance <script[artifact_data].data_key[artifacts.lifesteal.chance]>
@@ -144,36 +155,41 @@ artifact_world:
     - stop if:!<context.entity.is_spawned>
     - define chance <script[artifact_data].data_key[artifacts.bleed.chance]>
     - stop if:!<util.random_chance[<[chance]>]>
+
     - define duration <script[artifact_data].data_key[artifacts.bleed.duration]>
     - flag <context.entity> bleeding expire:<[duration]>
     - while <context.entity.has_flag[bleeding]>:
       - stop if:!<context.entity.is_spawned>
       - playeffect at:<context.entity.location.above[1.2]> effect:RED_DUST special_data:1.4|red offset:0.25 quantity:8
-      - hurt 0.25 <context.entity> source:<player>
+      - hurt 0.35 <context.entity> source:<player>
       - wait 1s
 
     #lightning
-    on player shoots item_flagged:artifacts.lightning:
+    after player shoots item_flagged:artifacts.lightning:
     - define chance <script[artifact_data].data_key[artifacts.lightning.chance]>
     - stop if:!<util.random_chance[<[chance]>]>
     - flag <context.projectile> lightning
     after entity_flagged:lightning hits:
+    - if !<context.projectile.location.proc[grief_prevention_check]> player:<context.shooter>:
+      - stop
     - strike <context.projectile.location>
     - remove <context.projectile>
 
     #explosion
-    on player shoots item_flagged:artifacts.explosion:
+    after player shoots item_flagged:artifacts.explosion:
     - define chance <script[artifact_data].data_key[artifacts.explosion.chance]>
     - stop if:!<util.random_chance[<[chance]>]>
     - flag <context.projectile> explosion
     after entity_flagged:explosion hits:
+    - if !<context.projectile.location.proc[grief_prevention_check]> player:<context.shooter>:
+      - stop
     - explode power:1.45 <context.projectile.location> fire breakblocks source:<player>
     - remove <context.projectile>
 
     #scanner
-    on player shoots item_flagged:artifacts.scanner:
+    after player shoots item_flagged:artifacts.scanner:
     - flag <context.projectile> scanner
-    on entity_flagged:scanner hits:
+    after entity_flagged:scanner hits:
     - define range <script[artifact_data].data_key[artifacts.scanner.range]>
     - define entities <context.projectile.location.find.living_entities.within[<[range]>].filter[glowing.not]>
     - stop if:<[entities].is_empty>
@@ -245,7 +261,7 @@ artifact_world:
     - determine <context.acceleration.mul[<[mul]>]>
 
     #knockback armor
-    on player damaged by monster flagged:artifacts.knockback:
+    after player damaged by monster flagged:artifacts.knockback:
     - ratelimit <player> 1s
     - define chance <script[artifact_data].data_key[artifacts.knockback.chance]>
     - stop if:!<util.random_chance[<[chance]>]>

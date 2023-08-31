@@ -222,7 +222,7 @@ artifact_data:
       tools:
       - Bow
       - Crossbow
-      chance: 15
+      chance: 100
     explosion:
       display: <&a>Explosion Artifact
       model: 10783
