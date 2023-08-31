@@ -181,6 +181,7 @@ artifact_world:
     - stop if:!<util.random_chance[<[chance]>]>
     - flag <context.projectile> explosion
     after entity_flagged:explosion hits:
+    #add breakblock arg???
     - explode power:1.5 <context.projectile.location> fire source:<player>
     - remove <context.projectile>
 
