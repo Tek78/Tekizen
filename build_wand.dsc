@@ -1,4 +1,8 @@
 #hyper showcase post inspired:
+#to do:
+#have builder mode instead of right clicking each time
+#have the type thing be a menu with multiple settings (type, stairs support, range and area etc.)
+#block displays w glowing instead of debug blocks?
 build_wand:
   type: item
   material: stick
@@ -23,6 +27,18 @@ wand_world:
     - flag <player> wand_blocks:<[blocks]>
     - debugblock <[blocks]> color:blue d:15s
 
+    on player left clicks block with:build_wand flagged:wand_blocks:
+    - ratelimit <player> 1t
+    - if <player.item_in_offhand> matches *_slab:
+      - define types <list[TOP|BOTTOM]>
+      - if <player.flag[wand.settings.type]||null> == BOTTOM:
+        - define type TOP
+      - else:
+        - define type BOTTOM
+
+    - narrate "<&c>Build Wand: <&7>Slab placement toggled: <&a><[type]>"
+    - flag <player> wand.settings.type:<[type]>
+
     on player right clicks block with:build_wand flagged:wand_blocks:
     - ratelimit <player> 1t
 
@@ -39,12 +55,9 @@ wand_world:
     - debugblock clear
     - modifyblock <player.flag[wand_blocks]> <player.item_in_offhand.material> source:<player>
 
-    #slab support
+     #slab support
     - if <player.item_in_offhand> matches *_slab:
-      - if <player.eye_location.ray_trace.y> > <context.location.y.add[0.5]>:
-        - define type TOP
-      - else:
-        - define type BOTTOM
+      - define type <player.flag[wand.settings.type]||TOP>
     - adjustblock <player.flag[wand_blocks]> type:<[type]>
 
     - take slot:offhand quantity:<[quantity]> if:<player.gamemode.equals[CREATIVE].not>
