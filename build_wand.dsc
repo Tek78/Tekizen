@@ -239,13 +239,12 @@ wand_find_blocks:
   - define settings <script[build_wand_data].data_key[settings]>
   - define area <player.flag[wand.area]||<[settings.area.default]>>
   - define range <player.flag[wand.range]||<[settings.range.default]>>
-  - define mode <player.flag[wand.mode]||free_build>
   - define format <player.flag[wand.format]||<[settings.formats].keys.first>>
 
   #target block and area
   - define block <player.cursor_on_solid[<[range]>]||null>
   - if <[format]> != horizontal:
-    - define block <[block].above[<[area]>]>
+    - define block <[block].above[<[area]>]||null>
 
   - define format <[settings.formats.<[format]>].replace[x].with[<[area]>]>
   - define blocks <[block].to_cuboid[<[block]>].expand[<[format]>].blocks.filter[advanced_matches[air]]||null>
