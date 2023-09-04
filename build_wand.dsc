@@ -41,12 +41,13 @@ wand_world:
 
     on player left clicks block with:build_wand flagged:wand.blocks:
     - ratelimit <player> 1t
-    - if <player.item_in_offhand> matches *_slab:
-      - define types <list[TOP|BOTTOM]>
-      - if <player.flag[wand.settings.type]||null> == BOTTOM:
-        - define type TOP
-      - else:
-        - define type BOTTOM
+    - if <player.item_in_offhand> !matches *_slab:
+      - stop
+    - define types <list[TOP|BOTTOM]>
+    - if <player.flag[wand.settings.type]||null> == BOTTOM:
+      - define type TOP
+    - else:
+      - define type BOTTOM
 
     - narrate "<&c>Build Wand: <&7>Slab placement toggled: <&a><[type]>"
     - remove <player.flag[wand.entities].filter[is_spawned]> if:<player.has_flag[wand.entities]>
