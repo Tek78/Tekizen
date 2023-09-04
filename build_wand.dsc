@@ -117,7 +117,7 @@ build_wand_world:
 
     #place hologram blocks
     on player right clicks block with:build_wand flagged:wand.blocks:
-    - ratelimit <player> 1t
+    - ratelimit <player> 5t
     #quantity (used if gamemode is not creative)
     - define quantity <player.flag[wand.blocks].size>
 
