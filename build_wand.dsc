@@ -1,7 +1,4 @@
 ##hyper showcase post inspired => https://discord.com/channels/315163488085475337/843302108001468446/1147314557212184656
-##TO DO:
-##Add blacklist option for solid materials in data script
-
 build_wand_data:
   type: data
   properties:
