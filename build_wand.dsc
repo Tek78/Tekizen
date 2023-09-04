@@ -20,6 +20,10 @@ build_wand_data:
     - OUTER_LEFT
     - OUTER_RIGHT
   settings:
+    formats:
+      horizontal: x,0,x
+      vertical_x: x,x,0
+      vertical_z: 0,x,x
     blacklisted_materials:
     - door
     range:
@@ -61,6 +65,13 @@ area_item:
   flags:
     data: area
 
+format_item:
+  type: item
+  material: nether_star
+  display name: <&a>Current format<&co> <&7><player.flag[wand.format]||<script[build_wand_data].data_key[settings.formats].keys.first>>
+  lore:
+  - <&7><&o>Click to cycle through options
+
 wand_settings_inventory:
   type: inventory
   inventory: chest
@@ -82,7 +93,7 @@ wand_settings_inventory:
   - define indicator <player.item_in_offhand.with[quantity=1;lore=<[indicator_lore]>]>
   - determine <[items].include[air|<[indicator]>]>
   slots:
-  - [] [] [] [] [] [] [] [range_item] [area_item]
+  - [] [] [] [] [] [] [format_item] [range_item] [area_item]
 
 wand_properties:
   type: procedure
@@ -158,13 +169,12 @@ build_wand_world:
     - run wand_find_blocks
 
     #place hologram blocks
-    on player right clicks block with:build_wand flagged:wand.blocks:
+    after player right clicks block with:build_wand flagged:wand.blocks:
     - ratelimit <player> 5t
     #quantity (used if gamemode is not creative)
     - define quantity <player.flag[wand.blocks].size>
 
     #stop if the material isn't solid
-    ##TO DO: Add option to blacklist solid blocks through data script
     - if !<player.item_in_offhand.proc[wand_is_valid]>:
       - narrate "<&c>Build Wand: <&7>Disallowed material!"
       - playsound <player> sound:BLOCK_NOTE_BLOCK_BASS pitch:0.1
@@ -214,17 +224,32 @@ build_wand_world:
       - flag player wand.<[value]>:<[range].sub[1]>
       - inventory set slot:<context.slot> d:<context.inventory> o:<context.item.script.name>
 
+    after player clicks format_item in wand_settings_inventory:
+    - define data <script[build_wand_data].data_key[settings.formats]>
+    - define format <player.flag[wand.format]||<[data].keys.first>>
+    - define index <[data].keys.find[<[format]>].add[1]>
+    - define new_format <[data].keys.get[<[index]>]||<[data].keys.first>>
+
+    - flag <player> wand.format:<[new_format]>
+    - inventory set slot:<context.slot> d:<context.inventory> o:<context.item.script.name>
+
 wand_find_blocks:
   type: task
   script:
   - define settings <script[build_wand_data].data_key[settings]>
   - define area <player.flag[wand.area]||<[settings.area.default]>>
   - define range <player.flag[wand.range]||<[settings.range.default]>>
+  - define mode <player.flag[wand.mode]||free_build>
+  - define format <player.flag[wand.format]||<[settings.formats].keys.first>>
 
   #target block and area
   - define block <player.cursor_on_solid[<[range]>]||null>
-  - define blocks <[block].to_cuboid[<[block]>].expand[<[area]>,0,<[area]>].blocks.filter[advanced_matches[air]]||null>
-  #stop if the 3x3 area isn't valid or the current holographic blocks are the same (event fires very rapidly)
+  - if <[format]> != horizontal:
+    - define block <[block].above[<[area]>]>
+
+  - define format <[settings.formats.<[format]>].replace[x].with[<[area]>]>
+  - define blocks <[block].to_cuboid[<[block]>].expand[<[format]>].blocks.filter[advanced_matches[air]]||null>
+  #stop if the area isn't valid or the current holographic blocks are the same (event fires very rapidly)
   - if <player.has_flag[wand.blocks]>:
     - if <player.flag[wand.blocks]> == <[blocks]>:
       - stop
