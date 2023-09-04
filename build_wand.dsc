@@ -1,6 +1,5 @@
 ##hyper showcase post inspired => https://discord.com/channels/315163488085475337/843302108001468446/1147314557212184656
 ##TO DO:
-##Add Range and Area options in settings menu
 ##Add blacklist option for solid materials in data script
 
 build_wand_data:
@@ -23,6 +22,15 @@ build_wand_data:
     - INNER_RIGHT
     - OUTER_LEFT
     - OUTER_RIGHT
+  settings:
+    blacklisted_materials:
+    - door
+    range:
+      max: 20
+      default: 10
+    area:
+      max: 5
+      default: 1
 
 build_wand:
   type: item
@@ -31,6 +39,30 @@ build_wand:
   lore:
   - <&a>Right Click <&7>- Place Block
   - <&a>Left Click <&7>- Open Settings Menu
+
+range_item:
+  type: item
+  material: ender_eye
+  display name: <&a>Current Range<&co> <&7><player.flag[wand.range]||<script[build_wand_data].data_key[settings.range.default]>>
+  lore:
+  - <&7><&o> Left click » <&e><&o>Increase
+  - <&7><&o> Right Click » <&e><&o>Decrease
+  - <empty>
+  - <&a>Max Range<&co> <&7><script[build_wand_data].data_key[settings.range.max]>
+  flags:
+    data: range
+
+area_item:
+  type: item
+  material: ender_pearl
+  display name: <&a>Current Area Range<&co> <&7><player.flag[wand.area]||<script[build_wand_data].data_key[settings.area.default]>>
+  lore:
+  - <&7><&o> Left click » <&e><&o>Increase
+  - <&7><&o> Right Click » <&e><&o>Decrease
+  - <empty>
+  - <&a>Max Range<&co> <&7><script[build_wand_data].data_key[settings.area.max]>
+  flags:
+    data: area
 
 wand_settings_inventory:
   type: inventory
@@ -53,7 +85,7 @@ wand_settings_inventory:
   - define indicator <player.item_in_offhand.with[quantity=1;lore=<[indicator_lore]>]>
   - determine <[items].include[air|<[indicator]>]>
   slots:
-  - [] [] [] [] [] [] [] [] []
+  - [] [] [] [] [] [] [] [range_item] [area_item]
 
 wand_properties:
   type: procedure
@@ -68,6 +100,17 @@ wand_properties:
     - define properties <[properties].with[<[key]>].as[<[val]>]>
   - determine <[properties]>
 
+wand_is_valid:
+  type: procedure
+  definitions: item
+  script:
+  - define data <script[build_wand_data].data_key[settings.blacklisted_materials]>
+  - if <[item].material.is_solid>:
+    - if <[data].filter_tag[<[item].advanced_matches[*_<[filter_value]>]>].is_truthy>:
+      - determine false
+    - determine true
+  - determine false
+
 build_wand_world:
   type: world
   events:
@@ -78,7 +121,9 @@ build_wand_world:
     #find all properties that are supported for the held material
     - define properties <[data].keys.filter_tag[<[mat].supports[<[filter_value]>]>]>
     #stop if none are found
-    - stop if:!<[properties].is_truthy>
+    - if !<[properties].is_truthy>:
+      - inventory open d:wand_settings_inventory
+      - stop
 
     - foreach <[properties]>:
       #skip to next property if already set
@@ -123,7 +168,7 @@ build_wand_world:
 
     #stop if the material isn't solid
     ##TO DO: Add option to blacklist solid blocks through data script
-    - if !<player.item_in_offhand.material.is_solid>:
+    - if !<player.item_in_offhand.proc[wand_is_valid]>:
       - narrate "<&c>Build Wand: <&7>Disallowed material!"
       - playsound <player> sound:BLOCK_NOTE_BLOCK_BASS pitch:0.1
       - stop
@@ -152,12 +197,36 @@ build_wand_world:
     on player breaks block with:build_wand:
     - determine cancelled
 
+    after player clicks range_item|area_item in wand_settings_inventory:
+    - define value <context.item.flag[data]>
+    - define settings <script[build_wand_data].data_key[settings]>
+    - define range <player.flag[wand.<[value]>]||<[settings.<[value]>.default]>>
+    - define max_range <[settings.<[value]>.max]>
+
+    - if <context.click> == LEFT:
+      - if <[range]> == <[max_range]>:
+        - narrate "<&c>Build Wand: <&7>Max Range already applied!"
+        - stop
+      - flag player wand.<[value]>:<[range].add[1]>
+      - inventory set slot:<context.slot> d:<context.inventory> o:<context.item.script.name>
+
+    - if <context.click> == RIGHT:
+      - if <[range]> == 1:
+        - narrate "<&c>Build Wand: <&7>Lowest Range already applied!"
+        - stop
+      - flag player wand.<[value]>:<[range].sub[1]>
+      - inventory set slot:<context.slot> d:<context.inventory> o:<context.item.script.name>
+
 wand_find_blocks:
   type: task
   script:
-  #target block and 3x3 area
-  - define block <player.cursor_on_solid[7]||null>
-  - define blocks <[block].to_cuboid[<[block]>].expand[1,0,1].blocks.filter[advanced_matches[air]]||null>
+  - define settings <script[build_wand_data].data_key[settings]>
+  - define area <player.flag[wand.area]||<[settings.area.default]>>
+  - define range <player.flag[wand.range]||<[settings.range.default]>>
+
+  #target block and area
+  - define block <player.cursor_on_solid[<[range]>]||null>
+  - define blocks <[block].to_cuboid[<[block]>].expand[<[area]>,0,<[area]>].blocks.filter[advanced_matches[air]]||null>
   #stop if the 3x3 area isn't valid or the current holographic blocks are the same (event fires very rapidly)
   - if <player.has_flag[wand.blocks]>:
     - if <player.flag[wand.blocks]> == <[blocks]>:
@@ -167,7 +236,7 @@ wand_find_blocks:
 
   - stop if:!<[block].is_truthy>
 
-  - if <player.item_in_hand> !matches build_wand || !<player.item_in_offhand.material.is_solid>:
+  - if <player.item_in_hand> !matches build_wand || !<player.item_in_offhand.proc[wand_is_valid]>:
     - stop
   - define material <player.item_in_offhand.material>
   - define properties <[material].proc[wand_properties]>
