@@ -10,8 +10,9 @@ test_this_world:
     - foreach <[blocks]> as:block:
       - spawn block_display[material=<[block].material>] <[block]> save:block
       - flag <player> testthis:->:<entry[block].spawned_entity>
-    - flag player origin:<player.flag[testthis].first.location>
+      - wait 1t
     - modifyblock <[blocks]> air
+    - narrate "<&a>Conversion finished! <&e><player.flag[testthis].size> <&7>blocks replaced in <&e><queue.time_ran.in_milliseconds.round_to[2]><&7>ms..."
 
     on rotatethis command flagged:testthis:
     #kind of got it???? at leaast a snippet (works with 20)
@@ -21,8 +22,10 @@ test_this_world:
 
     - foreach <[displays]> as:display:
       - define pos <[origin].sub[<[display].location.round_down>]>
-      - define loc <[origin].add[<location[<[pos].x>,0,<[pos].z>].rotate_around_y[<[angle].to_radians>]>]>
+      - define loc <[origin].add[<[pos].rotate_around_y[<[angle].to_radians>]>]>
 
       - teleport <[display]> <[loc]>
       - adjust <[display]> left_rotation:<location[0,1,0].to_axis_angle_quaternion[<[angle].to_radians>]>
       - wait 1t
+
+    - narrate "<&a>Finished! <&7>Rotated build by <&e><[angle]> <&7>degrees in <&e><queue.time_ran.in_milliseconds.round_to[2]><&7>ms..."
