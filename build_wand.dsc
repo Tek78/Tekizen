@@ -135,6 +135,7 @@ build_wand_world:
   events:
     #open settings menu
     after player left clicks block with:build_wand:
+    - stop if:!<player.item_in_offhand.proc[wand_is_valid]>
     - define mat <player.item_in_offhand.material>
     - define data <script[build_wand_data].data_key[properties]>
     #find all properties that are supported for the held material
