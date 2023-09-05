@@ -24,8 +24,10 @@ build_wand_data:
       horizontal: x,0,x
       vertical_x: x,x,0
       vertical_z: 0,x,x
+    #can input exact material name or a generic material name with a wildcard (oak_trapdoor, spruce_trapdoor => *_trapdoor)
     blacklisted_materials:
-    - door
+    - *_door
+    - spruce_trapdoor
     range:
       max: 20
       default: 10
@@ -75,6 +77,7 @@ format_item:
 wand_settings_inventory:
   type: inventory
   inventory: chest
+  debug: false
   size: 9
   title: <&a>Build Wand Settings
   gui: true
@@ -87,9 +90,11 @@ wand_settings_inventory:
     - define display "<&a>Current <[key]><&co> <&7><[value]>"
     - define lore "<&7><&o>Click to cycle through options"
     - define indicator_lore:->:<[display]>
-    - define items:->:<item[paper].with[display=<[display]>;lore=<[lore]>].with_flag[setting:<[key]>]>
+    - define items:->:<item[slime_ball].with[display=<[display]>;lore=<[lore]>].with_flag[setting:<[key]>]>
 
-  #indicator item with all the current info
+  #stop if no items are generated
+  - stop if:!<[items].exists>
+  #indicator item with all current settings
   - define indicator <player.item_in_offhand.with[quantity=1;lore=<[indicator_lore]>]>
   - determine <[items].include[air|<[indicator]>]>
   slots:
@@ -98,6 +103,7 @@ wand_settings_inventory:
 wand_properties:
   type: procedure
   definitions: material
+  debug: false
   script:
   - define data <script[build_wand_data].data_key[properties]>
   - define properties <map>
@@ -111,16 +117,21 @@ wand_properties:
 wand_is_valid:
   type: procedure
   definitions: item
+  debug: false
   script:
   - define data <script[build_wand_data].data_key[settings.blacklisted_materials]>
   - if <[item].material.is_solid>:
-    - if <[data].filter_tag[<[item].advanced_matches[*_<[filter_value]>]>].is_truthy>:
+    #if solid, check if blacklisted
+    - if <[data].filter_tag[<[item].advanced_matches[<[filter_value]>]>].is_truthy>:
       - determine false
+    #if not blacklisted
     - determine true
+  #if not solid
   - determine false
 
 build_wand_world:
   type: world
+  debug: false
   events:
     #open settings menu
     after player left clicks block with:build_wand:
@@ -164,7 +175,7 @@ build_wand_world:
       - flag player wand.blocks:!
     - run wand_find_blocks
 
-    on player walks:
+    after player walks:
     - ratelimit <player> 1t
     - run wand_find_blocks
 
@@ -197,68 +208,83 @@ build_wand_world:
     #remove blok flag after block entities are cleared
     - flag player wand.blocks:!
 
+    #disable placing and breaking while holding the wand
     on player places block using:off_hand:
     - if <player.item_in_hand> matches build_wand:
       - determine cancelled
-
     on player breaks block with:build_wand:
     - determine cancelled
 
     after player clicks range_item|area_item in wand_settings_inventory:
+    #all data needed, value can either be range or area, rest of code is generic for both
     - define value <context.item.flag[data]>
     - define settings <script[build_wand_data].data_key[settings]>
     - define range <player.flag[wand.<[value]>]||<[settings.<[value]>.default]>>
     - define max_range <[settings.<[value]>.max]>
 
+    #if left click, increase value
     - if <context.click> == LEFT:
+      #stop if value is at max
       - if <[range]> == <[max_range]>:
         - narrate "<&c>Build Wand: <&7>Max Range already applied!"
         - stop
       - flag player wand.<[value]>:<[range].add[1]>
       - inventory set slot:<context.slot> d:<context.inventory> o:<context.item.script.name>
 
+    #if right click, decrease value
     - if <context.click> == RIGHT:
+      #stop if value is the lowest (1)
       - if <[range]> == 1:
         - narrate "<&c>Build Wand: <&7>Lowest Range already applied!"
         - stop
       - flag player wand.<[value]>:<[range].sub[1]>
       - inventory set slot:<context.slot> d:<context.inventory> o:<context.item.script.name>
 
+    #changing the format (horizontal or vertical holographic blocks)
     after player clicks format_item in wand_settings_inventory:
     - define data <script[build_wand_data].data_key[settings.formats]>
+    #current format, if none set fallsback to first format in the settings
     - define format <player.flag[wand.format]||<[data].keys.first>>
+    #index of next format
     - define index <[data].keys.find[<[format]>].add[1]>
     - define new_format <[data].keys.get[<[index]>]||<[data].keys.first>>
 
     - flag <player> wand.format:<[new_format]>
+    #reset the item to show changes
     - inventory set slot:<context.slot> d:<context.inventory> o:<context.item.script.name>
 
 wand_find_blocks:
   type: task
+  debug: false
   script:
   - define settings <script[build_wand_data].data_key[settings]>
   - define area <player.flag[wand.area]||<[settings.area.default]>>
   - define range <player.flag[wand.range]||<[settings.range.default]>>
   - define format <player.flag[wand.format]||<[settings.formats].keys.first>>
 
-  #target block and area
+  #target block
   - define block <player.cursor_on_solid[<[range]>]||null>
+  #if the format is vertical, the center is raised by the area on the y axis
   - if <[format]> != horizontal:
     - define block <[block].above[<[area]>]||null>
 
+  #define the actual format with the values and the holographic blocks area
   - define format <[settings.formats.<[format]>].replace[x].with[<[area]>]>
   - define blocks <[block].to_cuboid[<[block]>].expand[<[format]>].blocks.filter[advanced_matches[air]]||null>
-  #stop if the area isn't valid or the current holographic blocks are the same (event fires very rapidly)
   - if <player.has_flag[wand.blocks]>:
+    #stop if the area defined is the same as the current holographic blocks of the player
     - if <player.flag[wand.blocks]> == <[blocks]>:
       - stop
+    #remove the previous blocks and block entities
     - remove <player.flag[wand.blocks].parse[flag[wand_entity]].filter[is_spawned]>
     - flag player wand.blocks:!
 
+  #stop if the center block isn't valid
   - stop if:!<[block].is_truthy>
 
   - if <player.item_in_hand> !matches build_wand || !<player.item_in_offhand.proc[wand_is_valid]>:
     - stop
+  #apply property changes to the material
   - define material <player.item_in_offhand.material>
   - define properties <[material].proc[wand_properties]>
   - flag <player> wand.blocks:<[blocks]>
