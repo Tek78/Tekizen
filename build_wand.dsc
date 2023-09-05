@@ -173,6 +173,7 @@ build_wand_world:
     #remove blocks with old properties and spawn new ones
     - if <player.has_flag[wand.blocks]>:
       - remove <player.flag[wand.blocks].parse[flag[wand_entity]].filter[is_spawned]>
+      - flag <player.flag[wand.blocks]> wand_entity:!
       - flag player wand.blocks:!
     - run wand_find_blocks
 
@@ -204,6 +205,7 @@ build_wand_world:
     - modifyblock <player.flag[wand.blocks]> <[material].with_map[<[properties]>]> source:<player>
     #remove the holograms
     - remove <player.flag[wand.blocks].parse[flag[wand_entity]].filter[is_spawned]>
+    - flag <player.flag[wand.blocks]> wand_entity:!
     - take slot:offhand quantity:<[quantity]> if:<player.gamemode.equals[CREATIVE].not>
     - playsound <player> sound:BLOCK_WOOD_STEP pitch:4
     #remove blok flag after block entities are cleared
@@ -278,6 +280,7 @@ wand_find_blocks:
       - stop
     #remove the previous blocks and block entities
     - remove <player.flag[wand.blocks].parse[flag[wand_entity]].filter[is_spawned]>
+    - flag <player.flag[wand.blocks]> wand_entity:!
     - flag player wand.blocks:!
 
   #stop if the center block isn't valid
