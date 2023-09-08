@@ -52,8 +52,13 @@ holobuild_command:
     - spawn block_display[material=<[block].material>] <[block]> save:block
     - flag <entry[block].spawned_entity> hb.original_location:<[block]>
     - flag <entry[block].spawned_entity> hb.group:<[group]>
-    - flag server hb.groups.<[group]>:->:<entry[block].spawned_entity>
+    - flag server hb.groups.<[group]>.entities:->:<entry[block].spawned_entity>
     - wait 1t
+
+  #origin point for rotations
+  - define locations <server.flag[hb.groups.<[group]>.entities].parse[location]>
+  - define origin <location[<[locations].parse[x].average>,<[locations].parse[y].average>,<[locations].parse[z].average>].with_world[<player.world>].center>
+  - flag server hb.groups.<[group]>.origin:<[origin]>
 
   - ~modifyblock <[blocks]> air no_physics
   - flag <player> holobuild.pos:!
@@ -65,7 +70,7 @@ holobuild_command:
     - narrate "<&c>Error! <&7>Group doesn't exist!"
     - stop
 
-  - foreach <server.flag[hb.groups.<[group]>]>:
+  - foreach <server.flag[hb.groups.<[group]>.entities]>:
     - remove <[value]>
   - flag server hb.groups.<[group]>:!
   - narrate "<&7>Group <&a><[group]> <&7>removed."
@@ -76,7 +81,7 @@ holobuild_command:
     - narrate "<&c>Error! <&7>Group doesn't exist!"
     - stop
 
-  - foreach <server.flag[hb.groups.<[group]>]>:
+  - foreach <server.flag[hb.groups.<[group]>.entities]>:
     - modifyblock <[value].flag[hb.original_location]> <[value].material> no_physics
     - remove <[value]>
     - wait 1t
@@ -96,33 +101,40 @@ holobuild_command:
     - stop
 
   - define axis <context.args.get[4]||y>
-  - define displays <server.flag[hb.groups.<[group]>]>
+  - define displays <server.flag[hb.groups.<[group]>.entities]>
   - define locations <[displays].parse[location]>
-  - define origin <location[<[locations].parse[x].average>,<[locations].parse[y].average>,<[locations].parse[z].average>].with_world[<[displays].first.world>].center>
+  - define origin <server.flag[hb.groups.<[group]>.origin]>
   - define origin_vector <location[<[origin].xyz>]>
-
-  - define q_x <location[1,0,0].to_axis_angle_quaternion[<[angle].to_radians>]>
-  - define q_y <location[0,1,0].to_axis_angle_quaternion[0]>
-  - define q_z <location[0,0,1].to_axis_angle_quaternion[0]>
-  - define quat <[q_x].mul[<[q_y]>].mul[<[q_z]>].normalize>
+  - define quat <location[<[axis].proc[left_rot]>].to_axis_angle_quaternion[<[angle].to_radians>].normalize>
 
   - foreach <[displays]> as:display:
-    - define offset <[display].flag[display_offset]||<location[<[display].location.xyz>].sub[<[origin_vector]>]>>
+    - define offset <[display].flag[display_offset].if_null[<location[<[display].location.xyz>].sub[<[origin_vector]>]>]>
     - define new_offset <[quat].transform[<[offset]>]>
 
     - teleport <[display]> <[origin].add[<[new_offset]>]>
     - define q_o <[display].left_rotation> if:!<[q_o].exists>
-    - adjust <[display]> left_rotation:<quaternion[identity]>
+#    - adjust <[display]> left_rotation:<quaternion[identity]>
     - flag <[display]> display_offset:<[offset]>
 
-  - define duration 100
-  - define q_i <quaternion[0,0,0,1]>
+  - define duration 40
   - repeat <[duration]> as:t:
     - define time <[t].div[<[duration]>]>
     - foreach <[displays]> as:display:
       - define offset <[display].flag[display_offset]>
-      - define q_s <[q_o].if_null[<[q_i]>].slerp[end=<[quat].mul[<[q_o].normalize>]>;amount=<[time]>]>
+      - define q_s <[q_o].slerp[end=<[quat].mul[<[q_o].normalize>]>;amount=<[time]>]>
       - define new_offset <[q_s].transform[<[offset]>]>
       - adjust <[display]> left_rotation:<[q_s]>
       - teleport <[display]> <[origin].add[<[new_offset]>]>
-    - wait 1t
+    - wait 0.1t
+
+  - narrate "<&7>Rotated group <&a><[group]> <&7>by <&a><[angle]> <&7>degrees on the <&a><[axis]> <&7>axis."
+
+left_rot:
+  type: procedure
+  definitions: axis
+  script:
+  - if <[axis]> == x:
+    - determine 1,0,0
+  - if <[axis]> == z:
+    - determine 0,0,1
+  - determine 0,1,0
