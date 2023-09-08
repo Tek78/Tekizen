@@ -101,8 +101,8 @@ holobuild_command:
   - define origin <location[<[locations].parse[x].average>,<[locations].parse[y].average>,<[locations].parse[z].average>].with_world[<[displays].first.world>].center>
   - define origin_vector <location[<[origin].xyz>]>
 
-  - define q_x <location[1,0,0].to_axis_angle_quaternion[0]>
-  - define q_y <location[0,1,0].to_axis_angle_quaternion[<[angle].to_radians>]>
+  - define q_x <location[1,0,0].to_axis_angle_quaternion[<[angle].to_radians>]>
+  - define q_y <location[0,1,0].to_axis_angle_quaternion[0]>
   - define q_z <location[0,0,1].to_axis_angle_quaternion[0]>
   - define quat <[q_x].mul[<[q_y]>].mul[<[q_z]>].normalize>
 
@@ -111,6 +111,7 @@ holobuild_command:
     - define new_offset <[quat].transform[<[offset]>]>
 
     - teleport <[display]> <[origin].add[<[new_offset]>]>
+    - define q_o <[display].left_rotation> if:!<[q_o].exists>
     - adjust <[display]> left_rotation:<quaternion[identity]>
     - flag <[display]> display_offset:<[offset]>
 
@@ -120,7 +121,7 @@ holobuild_command:
     - define time <[t].div[<[duration]>]>
     - foreach <[displays]> as:display:
       - define offset <[display].flag[display_offset]>
-      - define q_s <[q_i].slerp[end=<[quat]>;amount=<[time]>]>
+      - define q_s <[q_o].if_null[<[q_i]>].slerp[end=<[quat].mul[<[q_o].normalize>]>;amount=<[time]>]>
       - define new_offset <[q_s].transform[<[offset]>]>
       - adjust <[display]> left_rotation:<[q_s]>
       - teleport <[display]> <[origin].add[<[new_offset]>]>
