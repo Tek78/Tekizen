@@ -84,6 +84,7 @@ holobuild_command:
   - narrate "<&7>Group <&a><[group]> <&7>reverted and removed."
 
   rotate:
+  #implement the rotation on only one axis at a time (wee)
   - define group <context.args.get[2]||null>
   - if !<server.flag[hb.groups.<[group]>].exists>:
     - narrate "<&c>Error! <&7>Group doesn't exist!"
@@ -96,18 +97,22 @@ holobuild_command:
 
   - define axis <context.args.get[4]||y>
   - define displays <server.flag[hb.groups.<[group]>]>
-  - define vectorized <[displays].parse[location].proc[rotate_locations].context[<[angle]>|<[axis]>]>
-  - adjust <[displays]> interpolation_start:0
-  - adjust <[displays]> interpolation_duration:10t
+  - define locations <[displays].parse[location]>
+  - define origin <location[<[locations].parse[x].average>,<[locations].parse[y].average>,<[locations].parse[z].average>].with_world[<[displays].first.world>].center>
+  - define origin_vec <location[<[origin].xyz>]>
+
+  - define dummy <[displays].first>
+  - define q_x <location[1,0,0].to_axis_angle_quaternion[<[angle].to_radians>]>
+  - define q_y <location[0,1,0].to_axis_angle_quaternion[<[angle].to_radians>]>
+  - define q_z <location[0,0,1].to_axis_angle_quaternion[<[angle].to_radians>]>
+  - define quat <[q_x].mul[<[q_y]>].mul[<[q_z]>].normalize>
 
   - foreach <[displays]> as:display:
-    - define rotation <[display].left_rotation.represented_angle.to_degrees.add[<[angle]>].to_radians>
-    - define position <[vectorized].get[<[loop_index]>].with_world[<[display].world>]>
+    - define offset <location[<[display].location.xyz>].sub[<[origin_vec]>]>
+    - define new_offset <[quat].transform[<[offset]>]>
 
-    - teleport <[display]> <[position]>
-    - adjust <[display]> left_rotation:<location[<[axis].proc[left_rot]>].to_axis_angle_quaternion[<[rotation]>]>
-
-  - narrate "<&7>Rotated group <&a><[group]> <&7>by <&a><[angle]> <&7>degrees."
+    - teleport <[display]> <[origin].add[<[new_offset]>]>
+    - adjust <[display]> left_rotation:<[display].left_rotation.mul[<[quat]>].normalize>
 
 
 ##thank you krilliant :)
