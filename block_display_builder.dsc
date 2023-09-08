@@ -13,6 +13,7 @@ holobuild_command:
   description: Holo Builds main command
   permission: holobuild.use
   permission message: <&c>Sorry!
+  debug: false
   script:
   - define valid <list[pos|groups|convert|revert|rotate|destroy|help]>
   - if <context.args.first||null> !in <[valid]>:
@@ -113,7 +114,6 @@ holobuild_command:
 
     - teleport <[display]> <[origin].add[<[new_offset]>]>
     - define q_o <[display].left_rotation> if:!<[q_o].exists>
-#    - adjust <[display]> left_rotation:<quaternion[identity]>
     - flag <[display]> display_offset:<[offset]>
 
   - define duration 40
