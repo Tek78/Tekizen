@@ -99,51 +99,29 @@ holobuild_command:
   - define displays <server.flag[hb.groups.<[group]>]>
   - define locations <[displays].parse[location]>
   - define origin <location[<[locations].parse[x].average>,<[locations].parse[y].average>,<[locations].parse[z].average>].with_world[<[displays].first.world>].center>
-  - define origin_vec <location[<[origin].xyz>]>
+  - define origin_vector <location[<[origin].xyz>]>
 
-  - define dummy <[displays].first>
-  - define q_x <location[1,0,0].to_axis_angle_quaternion[<[angle].to_radians>]>
+  - define q_x <location[1,0,0].to_axis_angle_quaternion[0]>
   - define q_y <location[0,1,0].to_axis_angle_quaternion[<[angle].to_radians>]>
-  - define q_z <location[0,0,1].to_axis_angle_quaternion[<[angle].to_radians>]>
+  - define q_z <location[0,0,1].to_axis_angle_quaternion[0]>
   - define quat <[q_x].mul[<[q_y]>].mul[<[q_z]>].normalize>
 
   - foreach <[displays]> as:display:
-    - define offset <location[<[display].location.xyz>].sub[<[origin_vec]>]>
+    - define offset <[display].flag[display_offset]||<location[<[display].location.xyz>].sub[<[origin_vector]>]>>
     - define new_offset <[quat].transform[<[offset]>]>
 
     - teleport <[display]> <[origin].add[<[new_offset]>]>
-    - adjust <[display]> left_rotation:<[display].left_rotation.mul[<[quat]>].normalize>
+    - adjust <[display]> left_rotation:<quaternion[identity]>
+    - flag <[display]> display_offset:<[offset]>
 
-
-##thank you krilliant :)
-rotate_locations:
-    type: procedure
-    definitions: list|angle|axis
-    debug: false
-    script:
-    - define list <[list].as[list]>
-    - define centroid <location[<[list].parse[x].average>,<[list].parse[y].average>,<[list].parse[z].average>,<[list].first.world>]>
-    - define list <[list].parse[sub[<[centroid]>]].parse_tag[<location[<[parse_value].xyz>]>]>
-    - define list <[list].proc[rotate_axis].context[<[axis]>|<[angle]>]>
-    - determine <[list].parse[add[<[centroid]>]]>
-
-rotate_axis:
-  type: procedure
-  definitions: locations|axis|angle
-  script:
-  - if <[axis]> == x:
-    - determine <[locations].parse[rotate_around_x[<[angle].to_radians>]]>
-  - else if <[axis]> == z:
-    - determine <[locations].parse[rotate_around_z[<[angle].to_radians>]]>
-  - determine <[locations].parse[rotate_around_y[<[angle].to_radians>]]>
-
-#absolutely ugly need to look into shit more i cannot stand to look at this
-left_rot:
-  type: procedure
-  definitions: axis
-  script:
-  - if <[axis]> == x:
-    - determine 1,0,0
-  - if <[axis]> == z:
-    - determine 0,0,1
-  - determine 0,1,0
+  - define duration 100
+  - define q_i <quaternion[0,0,0,1]>
+  - repeat <[duration]> as:t:
+    - define time <[t].div[<[duration]>]>
+    - foreach <[displays]> as:display:
+      - define offset <[display].flag[display_offset]>
+      - define q_s <[q_i].slerp[end=<[quat]>;amount=<[time]>]>
+      - define new_offset <[q_s].transform[<[offset]>]>
+      - adjust <[display]> left_rotation:<[q_s]>
+      - teleport <[display]> <[origin].add[<[new_offset]>]>
+    - wait 1t
