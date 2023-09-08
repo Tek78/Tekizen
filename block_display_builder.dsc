@@ -145,8 +145,6 @@ holobuild_command:
     - narrate "<&c>Error! <&7>Invalid axis specified, must be: <&a>x<&7>, <&a>y <&7>or <&a>z<&7>!"
     - stop
 
-  #display locations
-  - define locations <[displays].parse[location]>
   #pivot point and vector
   - define origin <server.flag[hb.groups.<[group]>.origin]>
   - define origin_vector <location[<[origin].xyz>]>
