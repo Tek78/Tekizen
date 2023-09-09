@@ -2,8 +2,8 @@
 #actual blocks => block displays
 ##TODO:
 #test chunkload crap when reverting
-#groups sub command
 #teleporting groups (kill me)
+#adjusting mechanisms to group (probably sub command)
 
 holobuild_command:
   type: command
@@ -24,13 +24,56 @@ holobuild_command:
 
   help:
   - narrate "<&a>/hb pos 1<&7>/<&a>2 <&7> - select positions."
-  ##TO DO!!!
-  - narrate "<&a>/hb groups <&7>- list all groups, click on group name to teleport."
+  - narrate "<&a>/hb groups (page) <&7>- list all groups, click on group name to teleport."
   - narrate "<&a>/hb convert groupname <&7>- convert a selected area."
   - narrate "<&a>/hb revert groupname <&7>- revert a group to its original state."
   - narrate "<&a>/hb destroy groupname <&7>- destroy a holographic build."
-  - narrate "<&a>/hb rotate groupname angle axis <&7>- rotate a group around an axis, default axis is <&a>y<&7>."
+  - narrate "<&a>/hb rotate groupname angle (axis) <&7>- rotate a group around an axis, default axis is <&a>y<&7>."
   - narrate "<&a>/hb help <&7>- open this page."
+
+  groups:
+  #stop if no groups
+  - define groups <server.flag[hb.groups].keys||null>
+  - if !<[groups].is_truthy>:
+    - narrate "<&c>Error! <&7>No groups yet created."
+    - stop
+
+  - define page <context.args.get[2]||1>
+  - define paged <[groups].sub_lists[10]>
+  - define max_pages <[paged].size>
+
+  #valid page check
+  - if !<[page].is_integer>:
+    - narrate "<&c>Error! <&7>Invalid page input, must be an integer!"
+    - stop
+  - else if <[page]> > <[max_pages]> || <[page]> < 1:
+    - narrate "<&c>Error! <&7>Page doesn't exist!"
+    - stop
+
+  - define header "<&7><element[ ].repeat[15].strikethrough> <&7>Page <&e><[page]><&7>/<&e><[paged].size><&7> <element[ ].repeat[15].strikethrough>"
+  - define entries <[paged].get[<[page]>]>
+  - foreach <[entries]> as:entry:
+    #origin, number and click on teleport
+    - define origin <server.flag[hb.groups.<[entry]>.origin]>
+    - define pos <[groups].find[<[entry]>]>
+    - clickable save:teleport:
+      - teleport <player> <[origin]>
+    - define clickable "<&6><[pos]>. <&a><[entry].on_click[<entry[teleport].command>].on_hover[<&7>Click to teleport.]> <&7>- Center: <&e><[origin].simple>"
+    - define entries_clickable:->:<[clickable]>
+
+  #previous page
+  - if <[page]> > 1:
+    - define previous_page <element[<&a><&l>⤶  <&7>Previous Page].on_click[/hb groups <[page].sub[1]>].on_hover[<&7>Click to go back.]>
+    - define footer:->:<[previous_page]>
+
+  #next page
+  - if <[page].add[1]> <= <[max_pages]>:
+    - define next_page <element[<&7>Next Page <&a><&l>⤷].on_click[/hb groups <[page].add[1]>].on_hover[<&7>Click to go forward.]>
+    - define footer:->:<[next_page]>
+
+  - narrate <[header]>
+  - narrate <[entries_clickable].separated_by[<n>]>
+  - narrate <[footer].separated_by[ | ]> if:<[footer].exists>
 
   pos:
   #valid pose check
