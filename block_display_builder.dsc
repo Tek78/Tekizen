@@ -1,10 +1,3 @@
-#fuck around and find out kind of script
-#actual blocks => block displays
-##TODO:
-#test chunkload crap when reverting
-#teleporting groups (kill me)
-#adjusting mechanisms to group (probably sub command)
-
 holobuild_command:
   type: command
   name: holobuild
@@ -14,9 +7,11 @@ holobuild_command:
   description: Holo Builds main command
   permission: holobuild.use
   permission message: <&c>Sorry!
-  debug: false
+  debug: true
+  tab complete:
+  - determine TODO
   script:
-  - define valid <list[pos|groups|convert|revert|rotate|destroy|help]>
+  - define valid <list[pos|groups|convert|revert|rotate|destroy|help|glow]>
   - if <context.args.first||null> !in <[valid]>:
     - inject <script> path:help
   - else:
@@ -29,6 +24,7 @@ holobuild_command:
   - narrate "<&a>/hb revert groupname <&7>- revert a group to its original state."
   - narrate "<&a>/hb destroy groupname <&7>- destroy a holographic build."
   - narrate "<&a>/hb rotate groupname angle (axis) <&7>- rotate a group around an axis, default axis is <&a>y<&7>."
+  - narrate "<&a>/hb glow groupname true<&7>/<&a>false<&7>/<&a>color <&7>- sets the glowing status/color of a group"
   - narrate "<&a>/hb help <&7>- open this page."
 
   groups:
@@ -99,7 +95,7 @@ holobuild_command:
     - stop
 
   #define all blocks that are not air
-  - define blocks <[positions.1].to_cuboid[<[positions.2]>].blocks.filter[advanced_matches[!*air]]>
+  - define blocks <[positions.1].to_cuboid[<[positions.2]>].blocks.filter[advanced_matches[!*air|water|lava]]>
   #stop if no solid blocks
   - if !<[blocks].any>:
     - narrate "<&c>Error! <&7>There are no block in the selected area!"
@@ -210,7 +206,7 @@ holobuild_command:
     - define time <[t].div[<[duration]>]>
     - foreach <[displays]> as:display:
       - define offset <[display].flag[display_offset]>
-      #slerped quat starting and old, ending at new x old
+      #new rotation x old
       - define q_s <[q_o].slerp[end=<[quat].mul[<[q_o].normalize>]>;amount=<[time]>]>
       - define new_offset <[q_s].transform[<[offset]>]>
       - adjust <[display]> left_rotation:<[q_s]>
@@ -218,6 +214,28 @@ holobuild_command:
     - wait 0.1t
 
   - narrate "<&7>Rotated group <&a><[group]> <&7>by <&a><[angle]> <&7>degrees on the <&a><[axis]> <&7>axis."
+
+  glow:
+  - define group <context.args.get[2]||null>
+  - if !<server.flag[hb.groups.<[group]>].exists>:
+    - narrate "<&c>Error! <&7>Group doesn't exist!"
+    - stop
+  - define displays <server.flag[hb.groups.<[group]>.entities]>
+  - define valid <list[AQUA|BLACK|BLUE|DARK_AQUA|DARK_BLUE|DARK_GREY|DARK_GREEN|DARK_PURPLE|DARK_RED|GOLD|GREY|GREEN|LIGHT_PURPLE|MAGIC|RED|WHITE|YELLOW]>
+
+  - define arg_3 <context.args.get[3]||null>
+  - if <[arg_3].is_boolean>:
+    - adjust <[displays]> glowing:<[arg_3]>
+    - narrate "<&7>Glowing status set to <&a><[arg_3]> <&7>for group <&a><[group]>"
+    - stop
+  - else if <[arg_3]> in <[valid]>:
+    - if !<[displays].first.glowing>:
+      - narrate "<&c><&o>Minor: <&7>Glowing not enabled, use <&a>/hb groupname glow true <&7>to enable it."
+    - adjust <[displays]> glow_color:<[arg_3]>
+    - narrate "<&7>Glow color <&color[<[arg_3]>]><[arg_3]> <&7>applied for group <&a><[group]>."
+    - stop
+  - narrate "<&c>Error! <&7>Invalid argument specified! Valid arguments:"
+  - narrate <&a><list[ true|false].include[<[valid].parse[to_lowercase]>].separated_by[<&7>, <&a>]>
 
 left_rot:
   type: procedure
