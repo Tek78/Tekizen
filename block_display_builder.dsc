@@ -34,7 +34,7 @@ holobuild_command:
         - determine <server.flag[hb.groups].keys||<empty>>
   - if <context.args.first> in glow|rotate && <[spaces]> < 3:
     - if <context.args.first> == glow:
-      - determine <list[aqua|black|blue|dark_aqua|dark_blue|dark_grey|dark_green|dark_purple|dark_red|gold|grey|green|light_purple|red|white|yellow|true|false]>
+      - determine toggle|color
     - determine reset if:!<context.args.get[3].exists>
   - if <context.args.first> == rotate && <[spaces]> > 2 && <[spaces]> < 4:
     - determine x|y|z
@@ -53,7 +53,8 @@ holobuild_command:
   - narrate "<&a>/hb revert groupname <&7>- revert a group to its original state."
   - narrate "<&a>/hb destroy groupname <&7>- destroy a holographic build."
   - narrate "<&a>/hb rotate groupname angle (axis) <&7>- rotate a group around an axis, default axis is <&a>y<&7>."
-  - narrate "<&a>/hb glow groupname true<&7>/<&a>false<&7>/<&a>color <&7>- sets the glowing status/color of a group"
+  - narrate "<&a>/hb glow groupname toggle<&7>/<&a>color <&7>- sets the glowing status/color of a group."
+  - narrate "<&7>Color input can be legacy color codes (without the &), color name or hex code."
   - narrate "<&a>/hb help <&7>- open this page."
 
   groups:
@@ -256,21 +257,21 @@ holobuild_command:
     - narrate "<&c>Error! <&7>Group doesn't exist!"
     - stop
   - define displays <server.flag[hb.groups.<[group]>.entities]>
-  - define valid <list[AQUA|BLACK|BLUE|DARK_AQUA|DARK_BLUE|DARK_GREY|DARK_GREEN|DARK_PURPLE|DARK_RED|GOLD|GREY|GREEN|LIGHT_PURPLE|RED|WHITE|YELLOW]>
 
   - define arg_3 <context.args.get[3]||null>
-  - if <[arg_3].is_boolean>:
-    - adjust <[displays]> glowing:<[arg_3]>
-    - narrate "<&7>Glowing status set to <&a><[arg_3]> <&7>for group <&a><[group]>"
+  - if <[arg_3]> == toggle:
+    - define status <[displays].first.glowing.not>
+    - adjust <[displays]> glowing:<[status]>
+    - narrate "<&7>Glowing status set to <&a><[status]> <&7>for group <&a><[group]>"
     - stop
-  - else if <[arg_3]> in <[valid]>:
+  - else if <color[<[arg_3]>].is_truthy>:
     - if !<[displays].first.glowing>:
-      - narrate "<&c><&o>Minor: <&7>Glowing not enabled, use <&a>/hb groupname glow true <&7>to enable it."
-    - adjust <[displays]> glow_color:<[arg_3]>
-    - narrate "<&7>Glow color <&color[<[arg_3]>]><[arg_3]> <&7>applied for group <&a><[group]>."
+      - narrate "<&c><&o>Minor: <&7>Glowing was disabled, enabling and setting glow color."
+      - adjust <[displays]> glowing:true
+    - adjust <[displays]> glow_color:<&color[<[arg_3]>]>
+    - narrate "<&7>Glowing <&color[<[arg_3]>]>color <&7>changed for group <&a><[group]>."
     - stop
-  - narrate "<&c>Error! <&7>Invalid argument specified! Valid arguments:"
-  - narrate <&a><list[ true|false].include[<[valid].parse[to_lowercase]>].separated_by[<&7>, <&a>]>
+  - narrate "<&c>Error! <&7>Invalid argument specified! Must be <&a>toggle <&7>or a <&a>valid color <&7>(color name or hex code)"
 
 left_rot:
   type: procedure

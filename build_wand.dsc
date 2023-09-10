@@ -77,20 +77,21 @@ format_item:
 wand_settings_inventory:
   type: inventory
   inventory: chest
-  debug: false
+  debug: true
   size: 9
   title: <&a>Build Wand Settings
   gui: true
   procedural items:
-  - define settings <player.flag[wand.settings]>
+  - define properties <script[build_wand_data].data_key[properties].keys>
+  - define properties <[properties].filter_tag[<player.item_in_offhand.material.supports[<[filter_value]>]>]>
+  - stop if:!<[properties].is_truthy>
   #generating info for each property item
-  - foreach <[settings]>:
-    #skip to next property if the material doesnt support the current one
-    - foreach next if:!<player.item_in_offhand.material.supports[<[key]>]>
-    - define display "<&a>Current <[key]><&co> <&7><[value]>"
+  - foreach <[properties]> as:property:
+    - define value <player.flag[wand.settings.<[property]>]||<script[build_wand_data].data_key[properties.<[property]>].first>>
+    - define display "<&a>Current <[property]><&co> <&7><[value]>"
     - define lore "<&7><&o>Click to cycle through options"
     - define indicator_lore:->:<[display]>
-    - define items:->:<item[slime_ball].with[display=<[display]>;lore=<[lore]>].with_flag[setting:<[key]>]>
+    - define items:->:<item[slime_ball].with[display=<[display]>;lore=<[lore]>].with_flag[setting:<[property]>]>
 
   #stop if no items are generated
   - stop if:!<[items].exists>
@@ -136,21 +137,6 @@ build_wand_world:
     #open settings menu
     after player left clicks block with:build_wand:
     - stop if:!<player.item_in_offhand.proc[wand_is_valid]>
-    - define mat <player.item_in_offhand.material>
-    - define data <script[build_wand_data].data_key[properties]>
-    #find all properties that are supported for the held material
-    - define properties <[data].keys.filter_tag[<[mat].supports[<[filter_value]>]>]>
-    #stop if none are found
-    - if !<[properties].is_truthy>:
-      - inventory open d:wand_settings_inventory
-      - stop
-
-    - foreach <[properties]>:
-      #skip to next property if already set
-      - foreach next if:<player.has_flag[wand.settings.<[value]>]>
-      #current property, if unset fallsback to first in the data script
-      - define current <player.flag[wand.settings.<[value]>]||<[data.<[value]>].first>>
-      - flag <player> wand.settings.<[value]>:<[current]>
     - inventory open d:wand_settings_inventory
 
     #change a property of the material you're placing (stairs + slabs support so far)
