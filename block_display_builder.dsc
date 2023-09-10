@@ -1,6 +1,7 @@
 ##Turn actual builds into "holohraphic" (made of block displays) builds
 ##/hb help -> command help page
-##Anyone is free to use and/or modify this, I just made it for fun
+##Note- Keep the debug off, the rotation runs much smoother with it disabled (and also, it's very very spammy)
+##Anyone is free to use and/or modify this, I just made it for fun:)
 
 holobuild_command:
   type: command
@@ -122,14 +123,14 @@ holobuild_command:
     - narrate "<&c>Error! <&7>You must select <&a>2 <&7>positions to do this!"
     - stop
 
-  #define all blocks that are not air
-  - define blocks <[positions.1].to_cuboid[<[positions.2]>].blocks.filter[advanced_matches[!*air|water|lava]]>
+  ##The matcher list is not extensive, there are a few blocks that aren't supported by block displays that I might have missed
+  - define blocks <[positions.1].to_cuboid[<[positions.2]>].blocks.filter[advanced_matches[!*air|water|lava|*_portal|end_gateway]]>
   #stop if no solid blocks
   - if !<[blocks].any>:
     - narrate "<&c>Error! <&7>There are no block in the selected area!"
     - stop
 
-  #pivot point
+  #pivot point for rotation
   - define origin <location[<[blocks].parse[x].average>,<[blocks].parse[y].average>,<[blocks].parse[z].average>].with_world[<player.world>].center>
 
   - foreach <[blocks]> as:block:
