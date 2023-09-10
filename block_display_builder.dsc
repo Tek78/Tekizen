@@ -1,15 +1,43 @@
+##Turn actual builds into "holohraphic" (made of block displays) builds
+##/hb help -> command help page
+##Anyone is free to use and/or modify this, I just made it for fun
+
 holobuild_command:
   type: command
   name: holobuild
   usage: /holobuild myargs
   aliases:
   - hb
+  - holob
+  - hbuild
+  - hbuilds
   description: Holo Builds main command
   permission: holobuild.use
   permission message: <&c>Sorry!
-  debug: true
+  debug: false
+
   tab complete:
-  - determine TODO
+  - define spaces <context.raw_args.to_list.count[ ]>
+  - define first <list[pos|groups|convert|revert|destroy|rotate|glow|help]>
+  - if <[spaces]> < 1:
+    - determine <[first]>
+  - if <[spaces]> < 2 && <context.args.first> != help:
+    - choose <context.args.first||null>:
+      - case pos:
+        - determine 1|2
+      - case groups:
+        - determine <util.list_numbers_to[<server.flag[hb.groups].keys.size||<empty>>]>
+      - case convert:
+        - stop
+      - default:
+        - determine <server.flag[hb.groups].keys||<empty>>
+  - if <context.args.first> in glow|rotate && <[spaces]> < 3:
+    - if <context.args.first> == glow:
+      - determine <list[aqua|black|blue|dark_aqua|dark_blue|dark_grey|dark_green|dark_purple|dark_red|gold|grey|green|light_purple|red|white|yellow|true|false]>
+    - determine reset if:!<context.args.get[3].exists>
+  - if <context.args.first> == rotate && <[spaces]> > 2 && <[spaces]> < 4:
+    - determine x|y|z
+
   script:
   - define valid <list[pos|groups|convert|revert|rotate|destroy|help|glow]>
   - if <context.args.first||null> !in <[valid]>:
@@ -105,6 +133,10 @@ holobuild_command:
   - define origin <location[<[blocks].parse[x].average>,<[blocks].parse[y].average>,<[blocks].parse[z].average>].with_world[<player.world>].center>
 
   - foreach <[blocks]> as:block:
+    #prevent double bed spawning
+    - if <[block]> matches *_bed && <[block].material.half||null> == FOOT:
+      - flag server hb.groups.<[group]>.bed_foot:->:<[block]>/<[block].material>
+      - foreach next
     - spawn block_display[material=<[block].material>] <[block]> save:block
     #original location to revert to
     - flag <entry[block].spawned_entity> hb.original_location:<[block]>
@@ -147,12 +179,14 @@ holobuild_command:
     - stop
 
   - foreach <server.flag[hb.groups.<[group]>.entities]> as:display:
-    #load chunk if unloaded
-    ##NEED TO TEST!!
-    - chunkload <[display].location.chunk> duration:1s if:!<[display].location.chunk.is_loaded>
     - modifyblock <[display].flag[hb.original_location]> <[display].material> no_physics
     - remove <[display]>
     - wait 0.1t
+  - if <server.flag[hb.groups.<[group]>.bed_foot].exists>:
+    - define mats <server.flag[hb.groups.<[group]>.bed_foot].get_sub_items[2]>
+    - foreach <server.flag[hb.groups.<[group]>.bed_foot].get_sub_items[1]>:
+      - modifyblock <[value]> <[mats].get[<[loop_index]>]>
+      - wait 0.1t
   - flag server hb.groups.<[group]>:!
   - narrate "<&7>Group <&a><[group]> <&7>reverted and removed."
 
@@ -221,7 +255,7 @@ holobuild_command:
     - narrate "<&c>Error! <&7>Group doesn't exist!"
     - stop
   - define displays <server.flag[hb.groups.<[group]>.entities]>
-  - define valid <list[AQUA|BLACK|BLUE|DARK_AQUA|DARK_BLUE|DARK_GREY|DARK_GREEN|DARK_PURPLE|DARK_RED|GOLD|GREY|GREEN|LIGHT_PURPLE|MAGIC|RED|WHITE|YELLOW]>
+  - define valid <list[AQUA|BLACK|BLUE|DARK_AQUA|DARK_BLUE|DARK_GREY|DARK_GREEN|DARK_PURPLE|DARK_RED|GOLD|GREY|GREEN|LIGHT_PURPLE|RED|WHITE|YELLOW]>
 
   - define arg_3 <context.args.get[3]||null>
   - if <[arg_3].is_boolean>:
