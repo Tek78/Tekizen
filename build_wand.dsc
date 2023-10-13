@@ -5,11 +5,7 @@ build_wand_data:
     Type:
     - TOP
     - BOTTOM
-    Direction:
-    - NORTH
-    - SOUTH
-    - WEST
-    - EAST
+    Direction: <player.item_in_offhand.material.valid_directions||null>
     Half:
     - TOP
     - BOTTOM
@@ -77,7 +73,7 @@ format_item:
 wand_settings_inventory:
   type: inventory
   inventory: chest
-  debug: true
+  debug: false
   size: 9
   title: <&a>Build Wand Settings
   gui: true
@@ -87,14 +83,16 @@ wand_settings_inventory:
   - stop if:!<[properties].is_truthy>
   #generating info for each property item
   - foreach <[properties]> as:property:
-    - define value <player.flag[wand.settings.<[property]>]||<script[build_wand_data].data_key[properties.<[property]>].first>>
+    - define value <player.flag[wand.settings.<[property]>]||<script[build_wand_data].parsed_key[properties.<[property]>].first>>
+    - if <[property]> == direction:
+      - define directions <player.item_in_offhand.material.valid_directions>
+      - if <player.flag[wand.settings.direction]||null> !in <[directions]>:
+        - define value <[directions].first>
     - define display "<&a>Current <[property]><&co> <&7><[value]>"
     - define lore "<&7><&o>Click to cycle through options"
     - define indicator_lore:->:<[display]>
     - define items:->:<item[slime_ball].with[display=<[display]>;lore=<[lore]>].with_flag[setting:<[property]>]>
 
-  #stop if no items are generated
-  - stop if:!<[items].exists>
   #indicator item with all current settings
   - define indicator <player.item_in_offhand.with[quantity=1;lore=<[indicator_lore]>]>
   - determine <[items].include[air|<[indicator]>]>
@@ -106,12 +104,14 @@ wand_properties:
   definitions: material
   debug: false
   script:
-  - define data <script[build_wand_data].data_key[properties]>
+  - define data <script[build_wand_data].parsed_key[properties]>
   - define properties <map>
   - foreach <[data]>:
     #next if material doesnt support property
     - foreach next if:!<[material].supports[<[key]>]>
     - define val <player.flag[wand.settings.<[key]>]||<[value].first>>
+    - if <[key]> == direction && <player.flag[wand.settings.direction]||null> !in <[data.direction]>:
+      - define val <[data.direction].first>
     - define properties <[properties].with[<[key]>].as[<[val]>]>
   - determine <[properties]>
 
@@ -143,10 +143,12 @@ build_wand_world:
     ##TO DO??: Properties flag and settings reset when the player switches to an unsupported material
     after player clicks item_flagged:setting in wand_settings_inventory:
     - define property <context.item.flag[setting]>
-    - define data <script[build_wand_data].data_key[properties]>
+    - define data <script[build_wand_data].parsed_key[properties]>
 
     #current set property, if unset fallsback to first property in the data
     - define current <player.flag[wand.settings.<[property]>]||<[data.<[property]>].first>>
+    - if <[property]> == direction && <player.flag[wand.settings.direction]||null> !in <[data.direction]>:
+      - define current <[data.direction].first>
     #index of current property
     - define index <[data.<[property]>].find[<[current]>].add[1]>
     - define new <[data.<[property]>].get[<[index]>]||<[data.<[property]>].first>>
