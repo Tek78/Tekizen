@@ -1,10 +1,14 @@
 ##Needs testing => just rewrite and cleanup from looking at old code
 #old code => https://paste.denizenscript.com/View/116411
 
-##to do when rewrite fully (fancy stuff not needed really):
-#option to just toggle /p chat and type in normally
+##changed
+#storing uuid -> storing object
+#no need for "" around name if it contains spaces (feel like it's more convinient for players)
+#general cleanup
+#p chat is also toggleable
+
+##cool addons?:
 #a /p list command to list parties (can be clickable and pull up /p info for each)
-#spaces can be used instead of "" around everything? seems more practical (at least from a player's perspective)
 
 #not fully tested
 p_tab_complete:
@@ -51,7 +55,7 @@ p_command:
   - p
   data:
     define_party:
-    - define party <player.flag[party]>
+    - define party <player.flag[party]||null>
     - if !<server.has_flag[hm_parties.<[party]>]>:
       - narrate "<&4>Uh Oh! Your party doesn't exist! This shouldn't happen.. Contact developers."
       - stop
@@ -80,19 +84,15 @@ p_command:
   - if <player.has_flag[party]>:
     - narrate "<&[error]>You're already in a party!"
     - stop
-  - if <context.args.size> > 2:
-    - narrate "<&[error]>Too many arguments! Did you forget <&7><&dq><&[error]>quotes<&7><&dq> <&[error]>around your party's name?"
-    - stop
-  - define party <context.args.get[2].if_null[<player.name><&sq>s<&sp>Party].proc[trim_alphanumeric]>
-  - if <server.has_flag[hm_parties.<[party]>]>:
-    - narrate "<&[error]>This party already exists!"
-    - stop
+  - if <context.args.size> < 2:
+    - define party <player.name><&sq>s<&sp>Party
+  - else:
+    - define party <context.raw_args.after[create ]>
 
-  - flag server hm_parties.<[party]>.owner:<player>
-  - flag server hm_parties.<[party]>.members:->:<player>
-  - flag server hm_parties.<[party]>.creation:<util.time_now>
-  - flag <player> party:<[party]>
-  - narrate "<&[emphasis]>The party <&dq><[party]><&dq> has been created!"
+  - if <[party]> == null:
+    - narrate "<&[error]>Party name cannot be null!"
+    - stop
+  - run p_create def:<[party]>
 
   #tested (solo)
   disband:
@@ -117,22 +117,28 @@ p_command:
   - if !<player.has_flag[party]>:
     - narrate "<&[error]>You're not in a party!"
     - stop
-  - if <context.args.size> == 1:
-    - narrate "<&[error]>Your message cannot be empty!"
+
+  - if <context.args.get[2]||null> == null:
+    - if !<player.has_flag[party.chat]>:
+      - flag <player> party.chat
+      - narrate "<&[emphasis]>Party chat enabled."
+      - stop
+    - flag <player> party.chat:!
+    - narrate "<&[emphasis]>Party chat disabled."
     - stop
   - inject <script> path:data.define_party
   - narrate <context.raw_args.after[<context.args.first>]> format:party_chat_format targets:<server.flag[hm_parties.<[party]>.members]>
 
   #tested (solo)
   info:
-  - if !<player.has_flag[party]>:
-    - narrate "<&[error]>You're not in a party!"
-    - stop
-  - if <context.args.size> > 2:
-    - narrate "<&[error]>Too many arguments! Did you forget <&7><&dq><&[error]>quotes<&7><&dq> <&[error]>around your party's name?"
-    - stop
+  - if <context.args.size> < 2:
+    - if <player.has_flag[party]>:
+      - define party <player.flag[party]>
+    - else:
+      - narrate "<&[error]>Too few arguments! You must provide a party name."
+      - stop
 
-  - define party <context.args.get[2]||<player.flag[party]>>
+  - define party <context.raw_args.after[info ]> if:!<[party].exists>
   - if !<server.has_flag[hm_parties.<[party]>]>:
     - narrate "<&[error]>This party doesn't exist!"
     - stop
@@ -174,7 +180,7 @@ p_command:
     - narrate "<&[error]>Usage<&co> /party kick <&lt>player<&gt>"
     - stop
 
-  - define target <server.match_player[<context.args.get[2]>]||null>
+  - define target <server.match_player[<context.args.get[2]||null>]||null>
   - if !<[target].is_truthy>:
     - narrate "<&[error]>Player not found! Are you sure you typed their name correctly?"
     - stop
@@ -188,7 +194,102 @@ p_command:
   - narrate targets:<server.flag[hm_parties.<[party]>.members]> "<&[warning]><[target].name> has been kicked from the party."
   - narrate targets:<[target]> "<&c>You have been kicked from the party."
 
+  invite:
+  - if <context.args.size> > 2:
+    - narrate "<&[error]>Too many arguments!"
+    - narrate "<&[error]>Usage<&co> /party invite <&lt>player<&gt>"
+    - stop
+  - define target <server.match_player[<context.args.get[2]||null>]||null>
+  - if !<[target].is_truthy>:
+    - narrate "<&[error]>Player not found! Are you sure you typed their name correctly?"
+    - stop
+  - if <[target]> == <player>:
+    - narrate "<&[error]>You can't invite yourself!"
+    - stop
+  - if <[target].has_flag[party]>:
+    - narrate "<&[error]>This player is already in a party!"
+    - stop
+
+  - if !<player.has_flag[party]>:
+    - define name <player.name><&sq>s<&sp>Party
+    - run p_create def:<[name]>
+  - inject <script> path:data.define_party
+
+  - if !<[is_owner]>:
+    - narrate "<&[error]>You're not your party's owner!"
+    - stop
+  - if <server.flag[hm_parties.<[party]>.members].size> == 3:
+    - narrate "<&[error]>Your party is full!"
+    - stop
+  - if <player.has_flag[party_invites.<[target].uuid>]>:
+    - narrate "<&[error]>You've already invited this player recently! Try again later."
+    - stop
+
+  - define owner <player>
+  - clickable for:<[target]> usages:1 until:1m save:accept_invite:
+    - if <player.has_flag[party]>:
+      - narrate "<&[error]>You're already in a party!"
+      - stop
+    - if <server.flag[hm.parties.<[party]>.members].size> >= 3:
+      - narrate "<&[error]>This party is full!"
+      - stop
+    - narrate "<&[emphasis]>Invite accepted." targets:<[target]>
+    - narrate "<&[emphasis]><[target].name> accepted the invite to your party." targets:<[owner]>
+    - narrate targets:<server.flag[hm_parties.<[party]>.members]> "<&[emphasis]><[target].name> has joined the party."
+    - flag <[target]> party:<[party]>
+    - flag server hm_parties.<[party]>.members:->:<[target]>
+    - flag <[owner]> party_invites.<player.uuid>:!
+
+  - clickable for:<[target]> usages:1 until:1m save:deny_invite:
+    - narrate "<&[emphasis]>Invite denied." targets:<[target]>
+    - narrate "<&[emphasis]><[target].name> denied the invite to your party." targets:<[owner]>
+
+  - flag <player> party_invites.<[target].uuid> expire:1m
+  - narrate "<&[warning]>You have invited <[target].name> to your party!"
+  - narrate "<&[warning]><player.name> has invited you to join their party!" targets:<[target]>
+  - narrate <&sp.repeat[13]><&2><element[Accept].on_hover[Click here to accept the invite.].on_click[<entry[accept_invite].command>]><&sp.repeat[27]><&4><element[Deny].on_hover[Click here to deny the invite.].on_click[<entry[deny_invite].command>]> targets:<[target]>
+
 party_chat_format:
     type: format
     debug: false
     format: <&7><&l>[<&f><player.flag[party]><&7><&l>] <&f><player.name><&co><[text]>
+
+p_create:
+  type: task
+  definitions: party
+  script:
+  - if <server.has_flag[hm_parties.<[party]>]>:
+    - narrate "<&[error]>This party already exists!"
+    - stop
+
+  - flag server hm_parties.<[party]>.owner:<player>
+  - flag server hm_parties.<[party]>.members:->:<player>
+  - flag server hm_parties.<[party]>.creation:<util.time_now>
+  - flag <player> party:<[party]>
+  - narrate "<&[emphasis]>The party <&dq><[party]><&dq> has been created!"
+
+party_handlers:
+  type: world
+  debug: false
+  events:
+    on player chats flagged:party.chat:
+    - determine cancelled passively
+    - define members <server.flag[hm_parties.<player.flag[party]>.members]>
+
+    - narrate " <context.message>" format:party_chat_format targets:<[members]>
+
+    on player tries to attack player_flagged:party:
+    - if <context.entity.flag[party]> == <player.flag[party]||null>:
+      - determine cancelled
+
+    on player quit flagged:party:
+    - define party <player.flag[party]>
+    - define members <server.flag[hm_parties.<[party]>.members]>
+    - if <server.flag[hm_parties.<[party]>.owner]> == <player>:
+      - flag <[members]> party:!
+      - flag server hm_parties.<[party]>:!
+      - narrate "<&[warning]>The party has been disbanded due to leader disconnecting." targets:<[members]>
+      - stop
+    - flag <player> party:!
+    - flag server hm_parties.<[party]>.members:<-:<player>
+    - narrate "<&[warning]><player.name> has been removed from the party." targets:<[members]>
