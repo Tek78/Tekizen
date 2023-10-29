@@ -17,7 +17,7 @@ p_tab_complete:
     debug: false
     script:
 
-    - define party <player.flag[party]||null>
+    - define party <player.flag[party.name]||null>
     - define is_owner <server.flag[hm_parties.<[party]>.owner].if_null[null].equals[<player>]>
 
     - choose <[first_arg]>:
@@ -55,7 +55,7 @@ p_command:
   - p
   data:
     define_party:
-    - define party <player.flag[party]||null>
+    - define party <player.flag[party.name]||null>
     - if !<server.has_flag[hm_parties.<[party]>]>:
       - narrate "<&4>Uh Oh! Your party doesn't exist! This shouldn't happen.. Contact developers."
       - stop
@@ -133,7 +133,7 @@ p_command:
   info:
   - if <context.args.size> < 2:
     - if <player.has_flag[party]>:
-      - define party <player.flag[party]>
+      - define party <player.flag[party.name]>
     - else:
       - narrate "<&[error]>Too few arguments! You must provide a party name."
       - stop
@@ -236,7 +236,7 @@ p_command:
     - narrate "<&[emphasis]>Invite accepted." targets:<[target]>
     - narrate "<&[emphasis]><[target].name> accepted the invite to your party." targets:<[owner]>
     - narrate targets:<server.flag[hm_parties.<[party]>.members]> "<&[emphasis]><[target].name> has joined the party."
-    - flag <[target]> party:<[party]>
+    - flag <[target]> party.name:<[party]>
     - flag server hm_parties.<[party]>.members:->:<[target]>
     - flag <[owner]> party_invites.<player.uuid>:!
 
@@ -252,7 +252,7 @@ p_command:
 party_chat_format:
     type: format
     debug: false
-    format: <&7><&l>[<&f><player.flag[party]><&7><&l>] <&f><player.name><&co><[text]>
+    format: <&7><&l>[<&f><player.flag[party.name]><&7><&l>] <&f><player.name><&co><[text]>
 
 p_create:
   type: task
@@ -265,7 +265,7 @@ p_create:
   - flag server hm_parties.<[party]>.owner:<player>
   - flag server hm_parties.<[party]>.members:->:<player>
   - flag server hm_parties.<[party]>.creation:<util.time_now>
-  - flag <player> party:<[party]>
+  - flag <player> party.name:<[party]>
   - narrate "<&[emphasis]>The party <&dq><[party]><&dq> has been created!"
 
 party_handlers:
@@ -274,16 +274,16 @@ party_handlers:
   events:
     on player chats flagged:party.chat:
     - determine cancelled passively
-    - define members <server.flag[hm_parties.<player.flag[party]>.members]>
+    - define members <server.flag[hm_parties.<player.flag[party.name]>.members]>
 
     - narrate " <context.message>" format:party_chat_format targets:<[members]>
 
     on player tries to attack player_flagged:party:
-    - if <context.entity.flag[party]> == <player.flag[party]||null>:
+    - if <context.entity.flag[party.name]> == <player.flag[party.name]||null>:
       - determine cancelled
 
     on player quit flagged:party:
-    - define party <player.flag[party]>
+    - define party <player.flag[party.name]>
     - define members <server.flag[hm_parties.<[party]>.members]>
     - if <server.flag[hm_parties.<[party]>.owner]> == <player>:
       - flag <[members]> party:!
