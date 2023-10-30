@@ -118,6 +118,7 @@ queue_team_game_handler:
 
 hm_queue_timer:
   type: world
+  debug: false
   events:
     on delta time secondly priority:-5:
     - foreach <server.online_players_flagged[queued]> as:__player:
