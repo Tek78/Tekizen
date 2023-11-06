@@ -18,3 +18,11 @@ hm_level_system_data:
         pig: 1
         chicken: 1
         wither: 7.5
+    fishing:
+      settings:
+        #the xp it'd take to go from lvl 1 to lvl 2
+        base_threshold: 35
+        #how much the threshold increases with each level (in %)
+        threshold_percentage: 25
+        #how much the xp intake increaces with each level (in %)
+        xp_percentage: 0.15
