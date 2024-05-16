@@ -1,0 +1,60 @@
+rtp_config:
+  type: data
+  settings:
+    #The max amount of loops before the command gives up
+    max_loop: 50
+    #Worlds where you can't use this command
+    blacklisted_worlds:
+    - some_world_name
+    - another_world_name
+    - world_the_end
+    #list all your nether worlds names, as far as I'm aware there's no shortcut to checking if a world is a nether type
+    nether_worlds:
+    - world_nether
+    messages:
+      start_search: <&a>Please wait, finding a safe location...
+      search_success: <&a>Found a safe location! Teleporting...
+      search_fail: <&c>Failed to find a safe location! Try running the command again...
+      blacklisted_worlds: <&c>You can't random teleport in this world!
+
+rtp_command:
+  type: command
+  debug: false
+  name: rtp
+  usage: /rtp (world)
+  description: Random teleport
+  permission: rtp.use
+  permission message: No permission!
+  tab completions:
+    1: <server.worlds.parse[name].exclude[<script[rtp_config].data_key[settings.blacklisted_worlds]>]>
+  script:
+  #config, valid world check
+  - define config <script[rtp_config].parsed_key[settings]>
+  - define wrld <context.args.first||<player.location.world.name>>
+  - if <[wrld]> in <[config.blacklisted_worlds]>:
+    - narrate <[config.messages.blacklisted_worlds]>
+    - stop
+
+  #start loop
+  - narrate <[config.messages.start_search]>
+  - repeat <[config.max_loop]>:
+    #random offset loc, with specified world
+    - define r_loc <player.location.random_offset[1500,20,1500].with_world[<[wrld]>]>
+    #load chunk to read data
+    - chunkload <[r_loc].chunk> duration:1s
+    #if world is nether, higher range search, filter out bedrock
+    - if <[wrld]> in <[config.nether_worlds]>:
+      - define spawnable <[r_loc].find_spawnable_blocks_within[50].filter[below.material.advanced_matches[bedrock].not]>
+    - else:
+      #else get highest block and find spawnable blocks within a smaller range
+      - define spawnable <[r_loc].highest.find_spawnable_blocks_within[5]>
+    #loop next if no blocks found
+    - if !<[spawnable].any>:
+      - wait 0.1t
+      - repeat next
+    #teleport & stop all together
+    - teleport <player> <[spawnable].random>
+    - narrate <[config.messages.search_success]>
+    - stop
+  #if no blocks found after max_loop
+  - narrate <[config.messages.search_fail]>
