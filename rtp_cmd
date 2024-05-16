@@ -44,7 +44,7 @@ rtp_command:
     - chunkload <[r_loc].chunk> duration:1s
     #if world is nether, higher range search, filter out bedrock
     - if <[wrld]> in <[config.nether_worlds]>:
-      - define spawnable <[r_loc].find_spawnable_blocks_within[50].filter[below.material.advanced_matches[bedrock].not]>
+      - define spawnable <[r_loc].find_spawnable_blocks_within[50].filter[below.advanced_matches[bedrock].not]>
     - else:
       #else get highest block and find spawnable blocks within a smaller range
       - define spawnable <[r_loc].highest.find_spawnable_blocks_within[5]>
